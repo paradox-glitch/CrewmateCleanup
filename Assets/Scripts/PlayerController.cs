@@ -1,3 +1,4 @@
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -114,6 +115,9 @@ public class PlayerController : MonoBehaviour
     void RenderHandObject(GameObject item)
     {
         GameObject renderedHandItem = Instantiate(item, transform.position + handOffset, transform.rotation);
+
+        Destroy(renderedHandItem.GetComponent<Rigidbody>());
+        Destroy(renderedHandItem.GetComponent<BoxCollider>());
 
         Debug.Log("renderhand" + myHandItem);
     }
