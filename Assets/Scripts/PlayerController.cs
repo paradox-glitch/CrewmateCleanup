@@ -26,12 +26,23 @@ public class PlayerController : MonoBehaviour
 
     public GameObject brushPrefab, cattleProdPrefab, megaPhonePrefab;
 
+    public bool controllSchema = false;
+
+    public GameObject handholdergo;
+
     // Update is called once per frame
     void Update()
     {
         if (_directionVector.magnitude != 0)
         {
-            _angledDirectionVector = Quaternion.AngleAxis(transform.eulerAngles.y, Vector3.up) * _directionVector;
+
+
+            if (controllSchema)
+                _angledDirectionVector = Quaternion.AngleAxis(transform.eulerAngles.y, Vector3.up) * _directionVector;
+            else
+                _angledDirectionVector = Quaternion.AngleAxis(-45, Vector3.up) * _directionVector;
+
+
             _characterController.Move(_angledDirectionVector * _speed * Time.deltaTime);
         }
     }
@@ -90,26 +101,47 @@ public class PlayerController : MonoBehaviour
 
     void Pickup(GameObject interaction)
     {
+        DropItem();
         //if (myHandItem != HandItem.Hand)
         //    return;
         //else
         //{
-            if (interaction.CompareTag("Brush"))
-            {
-                myHandItem = HandItem.Brush;
-            }
-            else if (interaction.CompareTag("CattleProd"))
-            {
-                myHandItem = HandItem.CattleProd;
-            }
-            else if (interaction.CompareTag("MegaPhone"))
-            {
-                myHandItem = HandItem.MegaPhone;
-            }
+        if (interaction.CompareTag("Brush"))
+        {
+            myHandItem = HandItem.Brush;
+        }
+        else if (interaction.CompareTag("CattleProd"))
+        {
+            
+            myHandItem = HandItem.CattleProd;
+        }
+        else if (interaction.CompareTag("MegaPhone"))
+        {
+            myHandItem = HandItem.MegaPhone;
+        }
 
-            RenderHandObject(brushPrefab);
-            Destroy(interaction);
+        RenderHandObject(brushPrefab);
+        Destroy(interaction);
         //}
+    }
+
+    void DropItem()
+    {
+
+        GameObject item = null;
+
+        if (myHandItem == HandItem.Hand)
+            return;
+        else if (myHandItem == HandItem.MegaPhone)
+            item = megaPhonePrefab;
+        else if (myHandItem == HandItem.Brush)
+            item = brushPrefab;
+        else if (myHandItem == HandItem.CattleProd)
+            item = cattleProdPrefab;
+
+        Debug.Log("droped:" + item.name);
+
+       Instantiate(item, transform.position + new Vector3 (1,2,0), transform.rotation);
     }
 
     void RenderHandObject(GameObject item)
@@ -119,16 +151,20 @@ public class PlayerController : MonoBehaviour
         Destroy(renderedHandItem.GetComponent<Rigidbody>());
         Destroy(renderedHandItem.GetComponent<BoxCollider>());
 
+        renderedHandItem.transform.parent = handholdergo.transform;
+        renderedHandItem.transform.position = handholdergo.transform.position;
+        renderedHandItem.transform.rotation = handholdergo.transform.rotation;
+
         Debug.Log("renderhand" + myHandItem);
     }
 
     void CleanDirt(GameObject interaction)
     {
-        if(interaction.CompareTag("Packets") && myHandItem == HandItem.Hand)
+        if (interaction.CompareTag("Packets") && myHandItem == HandItem.Hand)
         {
 
         }
-        else if(interaction.CompareTag("Kids") && myHandItem == HandItem.MegaPhone)
+        else if (interaction.CompareTag("Kids") && myHandItem == HandItem.MegaPhone)
         {
 
         }

@@ -7,6 +7,8 @@ TagManager:
   - Brush
   - CattleProd
   - MegaPhone
+  - DiscordManager
+  - MainMenuManager
   layers:
   - Default
   - TransparentFX
