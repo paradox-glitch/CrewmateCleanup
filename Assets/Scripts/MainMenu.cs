@@ -16,6 +16,8 @@ public class MainMenu : MonoBehaviour
 
     private void Awake()
     {
+        Analytics.enabled = true;
+
         PlayerPrefs.DeleteAll();
 
         if(AnalyticsSessionInfo.sessionFirstRun)
@@ -61,8 +63,33 @@ public class MainMenu : MonoBehaviour
 
     void DiscordLoginSuccsess()
     {
-        Debug.Log("UserID - " + PlayerPrefs.GetString("UserID") + " Username - " + PlayerPrefs.GetString("Username"));
+        StartCoroutine(test());
+    }
+
+    IEnumerator test()
+    {
+        string _userID = PlayerPrefs.GetString("UserID");
+        string _userName = PlayerPrefs.GetString("Username");
+
+        Debug.Log("UserID - " + _userID + " Username - " + _userName);
+
+        AnalyticsResult testv = AnalyticsEvent.Custom("userLogin", new Dictionary<string, object>
+        {
+            { "user_name", _userName },
+            { "user_id", _userID }
+        });
+
+        if (testv != AnalyticsResult.Ok)
+            Debug.Log("fuck shit bad");
+        else if (testv == AnalyticsResult.Ok)
+            Debug.Log("nice");
+
+
+        Analytics.CustomEvent("userLogin");
+
         MenuSetup();
+
+        yield return null;
     }
 
     public void DiscordLogin()
@@ -102,11 +129,5 @@ public class MainMenu : MonoBehaviour
     void Start()
     {
         _usernameInput.onValueChanged.AddListener(delegate { UsernameCheck(); });
-
-        AnalyticsEvent.Custom("UserStartedTheGame", new Dictionary<string, object>
-        {
-            { "user_name", "testUser" },
-            { "user_id", "1234567890" }
-        });
     }
 }
