@@ -9,10 +9,21 @@ using _SDiag = System.Diagnostics;
 
 public class MainMenu : MonoBehaviour
 {
-    public Button _discordButton, _retryButton, _guestButton;
-    public GameObject _loginPanel, _mainMenuPanel, _discordManager;
-    public TextMeshProUGUI _discordErrorText, _guestErrorText;
-    public TMP_InputField _usernameInput;
+
+    [Header("Consent")]
+    [SerializeField] private GameObject _consentPanel;
+    [SerializeField] private Scrollbar _policyScroll;
+    [SerializeField] private Toggle _consentCheck;
+    [SerializeField] private Button _consentNext;
+
+    [Header("Login")]
+    [SerializeField] private TMP_InputField _usernameInput;
+    [SerializeField] private GameObject _loginPanel, _discordManager;
+    [SerializeField] private Button _discordButton, _retryButton, _guestButton;
+    [SerializeField] private TextMeshProUGUI _discordErrorText, _guestErrorText;
+
+    [Header("MainMenu")]
+    [SerializeField] private GameObject _mainMenuPanel;
 
     private void Awake()
     {
@@ -20,15 +31,28 @@ public class MainMenu : MonoBehaviour
 
         PlayerPrefs.DeleteAll();
 
-        if(AnalyticsSessionInfo.sessionFirstRun)
+        if (AnalyticsSessionInfo.sessionFirstRun)
         {
-            LoginSetup();
+            ConsentSetup();
         }
         else
         {
             //MenuSetup();
-            LoginSetup();
+            ConsentSetup();
         }
+    }
+
+    public void DidScroll()
+    {
+        if (_policyScroll.value <= 0)
+        {
+            _consentCheck.interactable = true;
+        }
+    }
+
+    public void DidCheck()
+    {
+        _consentNext.interactable = _consentCheck.isOn;
     }
 
     void UsernameCheck()
@@ -45,17 +69,28 @@ public class MainMenu : MonoBehaviour
         }
     }
 
+    void ConsentSetup()
+    {
+        _loginPanel.SetActive(false);
+        _mainMenuPanel.SetActive(false);
+        _consentPanel.SetActive(true);
+    }
+
     void MenuSetup()
     {
+        _consentPanel.SetActive(false);
         _loginPanel.SetActive(false);
         _mainMenuPanel.SetActive(true);
     }
 
-    void LoginSetup()
+    public void LoginSetup()
     {
+        _consentPanel.SetActive(false);
         _mainMenuPanel.SetActive(false);
         _loginPanel.SetActive(true);
-        bool _discordRunning = DiscordRunning();
+        bool _discordRunning = false;
+        _discordRunning = DiscordRunning();
+        Debug.Log("discord running = " + _discordRunning);
         _discordButton.interactable = _discordRunning;
         _retryButton.interactable = !_discordRunning;
         _discordErrorText.gameObject.SetActive(!_discordRunning);
