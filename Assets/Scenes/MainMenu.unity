@@ -639,7 +639,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 5900}
+  m_SizeDelta: {x: 0, y: 1500}
   m_Pivot: {x: 0, y: 1}
 --- !u!1 &334231195
 GameObject:
@@ -2527,7 +2527,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 396906299}
   m_Direction: 2
   m_Value: 1
-  m_Size: 0.098813556
+  m_Size: 0.38866666
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -3235,120 +3235,27 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Introduction\r\nAuxbrain, Inc. takes the privacy of our players very seriously.
-    We make an effort to only collect the data we need to operate our games and our
-    business. This document explains clearly how we collect, store and share information
-    (if any) that we collect in our games (\"Egg, Inc.\", \"Zombie Highway\") or
-    through customer service provided for our games. Should you have any questions
-    about your data please feel free to contact us at support@auxbrain.com.\r\nAcceptance
-    of Terms\r\nBy using our games and the services they provide, you accept the
-    policies laid out in this document. Additionally you acknowledge and consent
-    that we will collect, process, store, and share data and explained in this document.
-    If you do not consent you can simply not play our games or use our services.
-    Much of the data collection and processing we do can be disabled in the settings
-    for our apps, but some data collection is necessary to prevent fraud and ensure
-    proper operation of our apps.\r\nUpdates\r\nWe are constantly adding features
-    and auditing our Privacy Practices. As such this document is likely to change
-    over time. By continuing to play our game and use our services your acceptance
-    of these updates is implied.\r\nWhat or Who is Auxbrain, Inc.?\r\nAuxbrain, Inc.
-    (\"Auxbrain\", \"we\", \"us\", or \"our\") is a game developer and corporation
-    located in Los Angeles, California. To use EU GDPR regulation language, we are
-    the \"controller\" of any personal information we collect. (Personal information
-    is defined below)\r\n\r\nOur customer service team is versed in your data privacy
-    rights, and are supported by a data privacy manager should you have any concerns
-    or wish to carry out any actions on your data. Contact us at:\r\n\r\nEmail: support@auxbrain.com\r\nMail:
-    15332 Antioch St #427 Pacific Palisades, CA 90272\r\nWhat Data Do We Collect?
-    And Why?\r\nInformation You Provide\r\nAuxbrain collects minimal information
-    you provide. To access some features you will be asked to give yourself or a
-    team you are playing on a name and we collect that information. If you request
-    customer service, any information you send to us will be logged in our customer
-    support system.\r\n\r\nInformation We Collect Automatically\r\nThe majority of
-    the information we collect is automatic and based on your usage of our apps and
-    services. This namely consists of:\r\nYour game data for backup / restore, customer
-    service, and for certain features to function.\r\nAnalytics, information about
-    what you do in the game, to help use improve the game\r\nInformation about what
-    you purchase in the game for business purposes, and fraud prevention\r\nDevice
-    information and identifiers. We collect this information to attribute installs
-    driven by ads shown in our games, to track the performance of our ads used to
-    acquire new users, and to attribute actions of those acquired users to ad campaigns.\r\n\r\n\r\nInformation
-    From Third Parties\r\nAuxbrain collects personal identifiers such as your username
-    and player ID from Game Center or Google Play Games (\"Game Services\") you have
-    authorized us to use on your device. We do this to enable features in the game
-    based on your unique gamer identity, such as save game backup and recovery, team
-    play, customer service, and more.\r\n\r\nInformation We DON'T Collect\r\nAuxbrain,
-    Inc\r\nDOES NOT collect information on your location\r\nDOES NOT collect or store
-    your email (except if you contract customer service via email), phone number,
-    address, or any other sensitive personal information\r\nDOES NOT collect information
-    about your age, gender, ethnicity, sexual orientation, or any heath realted information\r\nDOES
-    NOT collect your real name (unless it is the same as your username for the above
-    mentioned Game Services. But we do not know if it is your real name)\r\nDOES
-    NOT collect biometric information\r\nDOES NOT collect internet, search, network
-    activity information\r\nDOES NOT collect sensor data, camera, audio, temperature,
-    etc\r\nDOES NOT collect Professional or education status\r\nHow Do We Collect
-    & Store Data?\r\nThe data we collect comes from our games and our customer service
-    operations.\r\n\r\nIt is transmitted over the web, (securely if sensitive), and
-    then stored in world class managed data-centers located in the United States.\r\n\r\nIf
-    your data being transmitted to or through the United States is not allowed where
-    you live, DO NOT user our app or services.\r\n\r\nWhile your use of the app give
-    us consent to collect and process the data, you may WITHDRAW consent at any time
-    in the SETTINGS portions of our app for specific features. If this level of control
-    is not adequate you MUST stop using our services.\r\nWhat Data Do We Have About
-    You?\r\nPlease see the section on what data we collect if you are curious about
-    the kind of data we have on you. If you want to know explicitly what information
-    we have on you personally please contact us at support@auxbrain.com\r\nWhat Power
-    Do I Have Over My Data?\r\nDepending on where you live, you have a range of power
-    over your data, but at Auxbrain, Inc. we currently extend the most common powers
-    to everyone.\r\n\r\nRight To Access\r\nYou have the right to see any data we
-    have on you. We present some of this information in the app, but should you wish
-    to know more, contact support@auxbrain.com\r\n\r\nRight To Data Mobility\r\nYou
-    have the right to move your data to another service, however the data Auxbrain
-    has is not usable on any other service as it is unique and proprietary to Auxbrain
-    games and services.\r\n\r\nRight To Be Forgotten\r\nAt any point should you want
-    us and our partners to \"forget\" you, simply go into one of our games SETTINGS
-    and choose to delete all remote data. Note that this action cannot be undone!
-    Contact support@auxbrain.com for more guidance on how to do this.\r\n\r\nRight
-    To Not Have Your Data Sold\r\nAuxbrain does not sell data we collect. While some
-    of our partners will not sell your data, some maintain that right, and while
-    that data is minimal, should you wish to limit it's sale you can disable Advertisements
-    and Push Notifications OR simply DO NOT use our games or services and you can
-    ensure no data of yours is sold. As our partners update their privacy policies
-    we are always pushing to disabe the sale of your data. Should you have a question
-    for one of our partners see their information below in Thid Parties.\r\nThird
-    Parties\r\nAuxbrain works with a few carefully selected vendors to provide services
-    for it's players and operate it's business. We DO share information with them
-    as is required to cary out their function. This consists of unique device identifiers,
-    device information, and usage information. As the controller of your data, we
-    carry out your right to be forgotten, and right to not have your data sold automatically,
-    but not all of them support programmatic control over these rights. Should you
-    wish to learn more please contact support@auxbrain.com or contact our partners
-    directly. NOTE: While Auxbrain may extend data privacy rights to all players,
-    our partners are not bound by this requirement and should you not posses the
-    rights of a GDPR customer or CCPA customer they may deny your request.\r\n\r\nVungle
-    (Advertisements) privacy@vungle.com\r\nUnity Ads (Advertisements) privacy@unity3d.com\r\nFacebook
-    (Advertisements) privacy@facebook.com\r\nGoogle/Admob (Advertisements) https://support.google.com/admob/gethelp\r\nFyber
-    (Advertisements) privacy@fyber.com\r\nIronSource (Advertisements) privacy@ironsource.com\r\nAppLovin
-    (Advertisements) privacy@applovin.com\r\nOne Signal (Push Notifications) privacy@onesignal.com\r\nAdjust
-    (Advertising Attribution) privacy@adjust.com\r\nChildren\r\nIf you are under
-    the age of 18, you must obtain your parent\u2019s permission to play our games
-    while online, or use any of our services. If you are under the age of 13 (or
-    14, 15, or 16 in some locations), you are not permitted to use any of our Services,
-    or play any of our games. All of our games are not intended for children under
-    the age of 13 (or 14, 15, 16) and we do not knowingly market to or collect, use
-    or disclose information from children. If Auxbrain learns that we have inadvertently
-    gathered personal information from children under such age, Auxbrain will take
-    reasonable measures to promptly erase such personal information from our records.
-    If you are a parent who wishes to have your child's accidentally collected information
-    deleted, please contact support@auxbrain.com or simply delete it from the SETTINGS
-    section of the application.\r\nData Retention\r\nAuxbrain retains data indefinitely
-    unless you request it to be deleted (see section on your data rights). We do
-    not guarantee we will maintain indefinite records as we may purge our backups
-    and analytics from time to time without notice.\r\nSecurity\r\nAuxbrain only
-    uses world class data centers with matching technical security and ensure our
-    partners do the same. Our organization limits access to information we collect
-    to an extremely limited and trained subset of employees who require access to
-    that information to cary out their job function.\r\nContact\r\nShould you have
-    any questions about this privacy policy, or request to exercise any of your data
-    privacy rights please contract us at support@auxbrain.com"
+  m_text: "<style=\"Title\">Introduction</style>\r\nCrewmate Cleanup is an educational
+    project, all data collected is for educational use.\r\n\r\n<style=\"Title\">What
+    Data is Collected? And Why?</style>\r\n\n<b>Information You Provide</b>\r\nMinimal
+    information you provide is collected. This currently only includes your username.\r\n\n<b>Information
+    Automatically Collected</b>\r\nThe majority of information collected is automatic
+    and based on your usage of CremateCleanup. This consists of;-\r\nAnalytics\r\n<i>Information
+    about how you interact with the game, this helps improve CremateCleanup.</i>\r\nPerformance
+    and Crash Reports\r\n<i>If your game crashes this provides me with important
+    information on what caused the error, this helps reduce the number of bugs in
+    CrewmateCleanup. </i>\r\nBasic Device information\r\n<i>Basic device information
+    allows for the tracking of performance and crash related issues. </i>\r\n\n<b>Information
+    From Third Parties</b>\r\nIf you authorize the usage of discord, your username
+    and user-id are collected. These will be used in place of your CrewmateCleanup
+    username and uuid, when submitting leaderboard and analytical data.\r\n\r\n<style=\"Title\">Data
+    Storage?</style>\r\nAll Data is stored with third parties, these parties provide
+    your data with the best security.\r\n\r\n<style=\"Title\">Data Removal?</style>\r\nIf
+    you would like your data to be removed, please visit the ingame options menu.\r\n\r\n<style=\"Title\">Data
+    Retention</style>\r\nThis is an educational project, all data collected during
+    this period, will be deleted once this project is complete, this excludes any
+    leaderboard data. \r\n\r\n<style=\"Title\">Contact</style>\r\nFor any questions,
+    please contact me@morganfinney.com\r\n"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -3570,7 +3477,11 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: I confirm I have Read, Understood and Accept the privacy policy.
+  m_Text: 'I confirm I have Read,
+
+    Understood and Accept
+
+    these Terms.'
 --- !u!222 &1420577222
 CanvasRenderer:
   m_ObjectHideFlags: 0

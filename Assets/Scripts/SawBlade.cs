@@ -5,13 +5,47 @@ using UnityEditor;
 
 public class SawBlade : MonoBehaviour
 {
-    public Vector3 targetPosition { get { return m_TargetPosition; } set { m_TargetPosition = value; } }
-    [SerializeField]
-    private Vector3 m_TargetPosition = new Vector3(1f, 0f, 2f);
+    public Vector3 targetPosition, otherTargetPos;
+    public bool _useX, _doT1;
+    public float speed;
 
-    public virtual void Update()
+    [SerializeField] private float _target1, _target2;
+
+    private void Start()
     {
-        transform.LookAt(m_TargetPosition);
+        if (_useX)
+        {
+            _target1 = targetPosition.x;
+            _target2 = otherTargetPos.x;
+        }
+        else
+        {
+            _target1 = targetPosition.z;
+            _target2 = otherTargetPos.z;
+        }
+
+    }
+
+    public void Update()
+    {
+        if(_doT1)
+        {
+            transform.Translate(Vector2.right * speed * Time.deltaTime);
+        }
+        else
+            transform.Translate(-Vector2.right * speed * Time.deltaTime);
+
+        if (_useX)
+        {
+            if (transform.position.x > _target1 && transform.position.x > _target2)
+            {
+                _doT1 = false;
+            }
+            else if (transform.position.x < _target1 && transform.position.x < _target2)
+            {
+                _doT1 = true;
+            }
+        }
     }
 }
 
@@ -20,18 +54,31 @@ public class SawBladeEditor : Editor
 {
     protected virtual void OnSceneGUI()
     {
+
+        
+
         SawBlade example = (SawBlade)target;
 
+        if(example._useX)
+        {
+            example.targetPosition.z = example.gameObject.transform.position.z;
+            example.otherTargetPos.z = example.gameObject.transform.position.z;
+        }
+
         float size = HandleUtility.GetHandleSize(example.targetPosition) * 0.5f;
+        float sizeOther = HandleUtility.GetHandleSize(example.otherTargetPos) * 0.5f;
         float snap = 0.1f;
 
         EditorGUI.BeginChangeCheck();
         Vector3 newTargetPosition = Handles.Slider(example.targetPosition, example.transform.right, size, Handles.ConeHandleCap, snap);
+        Vector3 otherTargetPosition = Handles.Slider(example.otherTargetPos, -example.transform.right, sizeOther, Handles.ConeHandleCap, snap);
         if (EditorGUI.EndChangeCheck())
         {
             Undo.RecordObject(example, "Change Look At Target Position");
             example.targetPosition = newTargetPosition;
-            example.Update();
+            example.otherTargetPos = otherTargetPosition;
         }
+
+        Handles.DrawDottedLine(example.targetPosition, example.otherTargetPos, 6);
     }
 }

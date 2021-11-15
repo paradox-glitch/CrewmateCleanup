@@ -102,9 +102,9 @@ public class DiscordController : MonoBehaviour
             Assets =
             {
             LargeImage = "logo",
-                LargeText = "Developed for AGDS Halloween Game Jam 2021",
-                SmallImage = "jaffaspook",
-                SmallText = "Developed by Okay Dinos",
+                LargeText = "This game kinda sus",
+                SmallImage = "null",
+                SmallText = "",
             }
         };
         return activity;

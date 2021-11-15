@@ -4,24 +4,35 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - Brush
-  - CattleProd
-  - MegaPhone
   - DiscordManager
   - MainMenuManager
+  - SpaltDecalPool
+  - DropDecalPool
+  - SplatParticles
+  - Dirt.DeadBody
+  - Pickup.Mop
+  - Dirt.SmallDirt
+  - Manager.Level
+  - Dirt.SmallJunk
+  - Dirt.Kid
+  - Dirt.Rat
+  - Tool.Gloves
+  - Tool.Brush
+  - Tool.CattleProd
+  - Tool.MegaPhone
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Player
   - Water
   - UI
   - Pickup
   - Dirt
-  - 
-  - 
-  - 
-  - 
+  - Environment
+  - PlayerNope
+  - DisposalArea
+  - EnvironmentInvis
   - 
   - 
   - 
