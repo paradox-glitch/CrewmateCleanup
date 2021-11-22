@@ -10,15 +10,17 @@ public class DirtSpawner : MonoBehaviour
 {
     public int areas = 5;
 
+    public int DirtAmount = 4;
+
     public ToSpawnData[] data = new ToSpawnData[100];
+
+    public GameObject[] m_DirtObjects;
 
     public List<ToSpawnData> list = new List<ToSpawnData>();
 
     // Start is called before the first frame update
     void Start()
     {
-        
-
         for (int i = 0; i < areas; i++)
         {
             var hash = 0;
@@ -28,16 +30,19 @@ public class DirtSpawner : MonoBehaviour
                 hash = ((hash << 5) - hash) + hi;
                 hash = hash & hash;
             }
-            Debug.Log(hash);
             Random.InitState(hash);
             for (int b = 0; b < data[i].dirtToSpawn; b++)
             {
                 float x = (float)(data[i].xMin.x + ((data[i].xMax.x - data[i].xMin.x) * (float)Random.value));
                 float z = (float)(data[i].zMin.z + ((data[i].zMax.z - data[i].zMin.z) * (float)Random.value));
 
-                Vector3 lmaovector = new Vector3(x, 5, z);
+                Vector3 lmaovector = new Vector3(x, 2, z);
 
                 Debug.DrawRay(lmaovector, Vector3.down * 6, Color.red, 10f);
+
+                int l_ObjectToSpawn = Random.Range(0, m_DirtObjects.Length);
+
+                Instantiate(m_DirtObjects[l_ObjectToSpawn], lmaovector, transform.rotation);
             }
         }
     }
@@ -106,9 +111,10 @@ public class DirtSpawnerEditor : Editor
         int oldareas = mp.areas;
         mp.areas = EditorGUILayout.IntSlider("Number of Spawn Areas", mp.areas, 0, 100);
 
-    
-
-
+        var property = serializedObject.FindProperty("m_DirtObjects");
+        serializedObject.Update();
+        EditorGUILayout.PropertyField(property, true);
+        serializedObject.ApplyModifiedProperties();
 
         EditorGUILayout.LabelField("");
         for (int i = 0; i < mp.areas; i++)

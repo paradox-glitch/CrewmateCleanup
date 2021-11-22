@@ -13,19 +13,28 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private float
         m_PlayerMovementSpeed = 6f,
+        m_Gravity = -9.81f,
+        m_PlayerJumpHeight,
+        m_GroundCheckRadius,
         m_HandInteractRadius,
         m_PlayerReachRadius;
 
+    [SerializeField]
+    private Material[] m_PlayerColors;
+
     private Vector3
         m_InputVector,
-        m_LookAtPosition;
+        m_LookAtPosition,
+        m_PlayerVelocoty;
 
     private RaycastHit m_MouseRayHit;
 
     [SerializeField]
     private LayerMask
+        m_EnviromentLayerMAsk,
         m_PickUpLayerMask,
         m_DirtLayerMask,
+        m_InteracatableLayerMask,
         m_DrawRayLayerMask;
     
     [SerializeField]
@@ -34,14 +43,21 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private bool m_LocalizeMovement = false;
 
-    private bool m_InputEnabled = true;
+    private bool
+        m_IsGrounded = false,
+        m_ToJump = false;
 
-    private int m_PlayerHealth = 3;
+    private int
+        m_PlayerHealth = 3,
+        m_SmallDirtCleaned = 0,
+        m_InputEnabled = 0,
+        m_SmallDirtTarget;
 
     [SerializeField]
     private GameObject
         m_DeadCrewmateLower,
         m_DeadCrewmateUpper,
+        m_Bag,
         m_BloodSplaterLauncher;
 
     private GameObject
@@ -62,17 +78,35 @@ public class PlayerController : MonoBehaviour
         m_DropDecalPool = GameObject.FindGameObjectWithTag("DropDecalPool");
         m_SplatDecalPool = GameObject.FindGameObjectWithTag("SpaltDecalPool");
         m_LevelManager = GameObject.FindGameObjectWithTag("Manager.Level");
+        m_SmallDirtTarget = UnityEngine.Random.Range(7, 16);
+        ChangeColor();
+        OnLook();
     }
 
 
     void Update()
     {
-        if (m_InputEnabled)
+        if (m_InputEnabled <= 0)
             PlayerCycle();
     }
 
     void PlayerCycle()
     {
+
+        m_IsGrounded = Physics.CheckSphere(transform.position, m_GroundCheckRadius, m_EnviromentLayerMAsk);
+
+        if (m_IsGrounded && m_PlayerVelocoty.y < 0)
+            m_PlayerVelocoty.y = -2f;
+
+        m_PlayerVelocoty.y += m_Gravity * Time.deltaTime;
+        m_CharacterController.Move(m_PlayerVelocoty * Time.deltaTime);
+
+        if(m_ToJump && m_IsGrounded)
+        {
+            m_PlayerVelocoty.y = Mathf.Sqrt(m_PlayerJumpHeight * -2f * m_Gravity);
+        }
+
+
         Quaternion l_TargetRotation = Quaternion.LookRotation(m_LookAtPosition);
         float l_TargetEualarY = Mathf.LerpAngle(transform.eulerAngles.y, l_TargetRotation.eulerAngles.y, Time.deltaTime * 10);
         Vector3 l_TargetEular = new Vector3(0f, l_TargetEualarY, 0f);
@@ -100,6 +134,14 @@ public class PlayerController : MonoBehaviour
         
     }
 
+    void OnJump()
+    {
+        if (m_InputEnabled <= 0 && m_IsGrounded)
+        {
+            m_PlayerVelocoty.y = Mathf.Sqrt(m_PlayerJumpHeight * -2f * m_Gravity);
+        }
+    }
+
     //* Called by UnityEngine.InputSystem when the mouse is moved
     void OnLook()
     {
@@ -107,6 +149,8 @@ public class PlayerController : MonoBehaviour
 
         if (Physics.Raycast(l_MouseRay, out m_MouseRayHit, 50f, m_DrawRayLayerMask))
         {
+            Debug.DrawRay(l_MouseRay.origin, l_MouseRay.direction * m_MouseRayHit.distance, Color.blue);
+
             Vector3 l_MouseRayHitFixed = new Vector3(m_MouseRayHit.point.x, transform.position.y, m_MouseRayHit.point.z);
 
             Debug.DrawLine(transform.position, l_MouseRayHitFixed, Color.green);
@@ -119,9 +163,33 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    void SmallDirtCleaned()
+    {
+        m_SmallDirtCleaned++;
+
+        if(m_SmallDirtCleaned >= m_SmallDirtTarget)
+        {
+            Instantiate(m_Bag, m_MouseRayHit.point + Vector3.up, transform.rotation);
+            m_SmallDirtTarget = UnityEngine.Random.Range(7, 16);
+            m_SmallDirtCleaned = 0;
+        }
+    }
+
     //* Called by UnityEngine.InputSystem when the LMB is pressed
     void OnFire()
     {
+        if (m_InputEnabled > 0)
+            return;
+
+            GameObject l_InteractionObject = InteractionObject(m_InteracatableLayerMask);
+
+        if(l_InteractionObject != null)
+        {
+            l_InteractionObject.SendMessage("TriggerInteraction");
+            return;
+        }
+
+
         switch (m_CurrentHandItem)
         {
             case m_HandItems.Hand:
@@ -131,7 +199,7 @@ public class PlayerController : MonoBehaviour
                 DoMop();
                 break;
             case m_HandItems.Brush:
-                try { InteractionObject(m_DirtLayerMask, "Dirt.SmallDirt").SendMessage("CleanUp"); }
+                try { InteractionObject(m_DirtLayerMask, "Dirt.SmallJunk").SendMessage("CleanUp", this.gameObject); }
                 catch(Exception e) { Debug.Log("NoItemFound"); }
                 break;
             case m_HandItems.CattleProd:
@@ -149,8 +217,20 @@ public class PlayerController : MonoBehaviour
                 break;
         }
 
+        if(m_LevelManager != null)
         m_LevelManager.GetComponent<LevelManager>().SendMessage("DoCheck");
     }
+
+    void AddPauseReason()
+    {
+        m_InputEnabled += 1;
+    }
+
+    void RemovePauseReason()
+    {
+        m_InputEnabled -= 1;
+    }
+
 
     void DoBodyDrag(bool a_ForceDrop = false)
     {
@@ -169,6 +249,12 @@ public class PlayerController : MonoBehaviour
             l_Body.layer = 9;
         }
 
+    }
+
+    void ChangeColor()
+    {
+        transform.GetChild(0).gameObject.GetComponent<Renderer>().material = m_PlayerColors[PlayerPrefs.GetInt("CrewmateColor")];
+        transform.GetChild(0).GetChild(0).gameObject.GetComponent<Renderer>().material = m_PlayerColors[PlayerPrefs.GetInt("CrewmateColor")];
     }
 
     void Pickup()
@@ -241,7 +327,9 @@ public class PlayerController : MonoBehaviour
 
         Collider[] l_ItemsNearBoth = CheckBoth(l_ItemsNearBody, l_ItemsNearHand);
 
-        GameObject l_ClosestItem = GetClosest(l_ItemsNearBoth);
+
+
+        GameObject l_ClosestItem = GetClosest(l_ItemsNearBoth, a_tag);
 
         return l_ClosestItem;
     }
@@ -262,6 +350,7 @@ public class PlayerController : MonoBehaviour
     //* Checks that the collider is in both arrays
     Collider[] CheckBoth(Collider[] a_Array1, Collider[] a_Array2)
     {
+
         var l_Intersect = a_Array1.Intersect(a_Array2);
 
         return l_Intersect.ToArray();
@@ -270,11 +359,12 @@ public class PlayerController : MonoBehaviour
     //* Gets the closets item to the player
     GameObject GetClosest(Collider[] a_Objects, string a_tag = null)
     {
+        
         GameObject l_BestTarget = null;
         float l_ClosestDistance = Mathf.Infinity;
         foreach (Collider a_PotentialTarget in a_Objects)
         {
-            if (a_tag == null || a_tag == a_PotentialTarget.tag)
+            if (a_tag == null || a_PotentialTarget.gameObject.tag == a_tag)
             {
                 float l_Distance = Vector3.Distance(a_PotentialTarget.transform.position, m_MouseRayHit.point);
                 if (l_Distance < l_ClosestDistance)
@@ -287,39 +377,33 @@ public class PlayerController : MonoBehaviour
         return l_BestTarget;
     }
 
-    void CleanDirt()
-    {
-
-    }
-
     void DoDamage()
     {
         m_PlayerHealth--;
         m_CharacterController.enabled = false;
-        m_InputEnabled = false;
+        m_InputEnabled += 1;
         this.gameObject.transform.GetChild(0).gameObject.SetActive(false);
         DoDrop();
-        Instantiate(m_DeadCrewmateLower, gameObject.transform.position, transform.rotation * Quaternion.Euler(m_DeadCrewmateLower.transform.rotation.eulerAngles));
-        Instantiate(m_DeadCrewmateUpper, gameObject.transform.position, transform.rotation * Quaternion.Euler(m_DeadCrewmateUpper.transform.rotation.eulerAngles));
+        GameObject l_Body = Instantiate(m_DeadCrewmateLower, gameObject.transform.position, transform.rotation * Quaternion.Euler(m_DeadCrewmateLower.transform.rotation.eulerAngles));
+        l_Body.GetComponent<Renderer>().material = m_PlayerColors[PlayerPrefs.GetInt("CrewmateColor")];
+        l_Body = Instantiate(m_DeadCrewmateUpper, gameObject.transform.position, transform.rotation * Quaternion.Euler(m_DeadCrewmateUpper.transform.rotation.eulerAngles));
+        l_Body.GetComponent<Renderer>().material = m_PlayerColors[PlayerPrefs.GetInt("CrewmateColor")];
         Instantiate(m_BloodSplaterLauncher, gameObject.transform.position, gameObject.transform.rotation);
+        m_LevelManager.SendMessage("SetPlayerHealth", m_PlayerHealth);
 
         if (m_PlayerHealth > 0)
         {
             StartCoroutine(WaitToRespawn());
-        }
-        else if (m_PlayerHealth <= 0)
-        {
-
         }
     }
 
     IEnumerator WaitToRespawn()
     {
         yield return new WaitForSeconds(1.2f);
-        transform.position = m_LevelManager.transform.GetChild(0).position;
+        transform.position = m_LevelManager.transform.GetChild(0).position + Vector3.up;
 
         m_CharacterController.enabled = true;
-        m_InputEnabled = true;
+        m_InputEnabled -= 1;
         this.gameObject.transform.GetChild(0).gameObject.SetActive(true);
     }
 

@@ -20,6 +20,7 @@ TagManager:
   - Tool.Brush
   - Tool.CattleProd
   - Tool.MegaPhone
+  - Manager.Game
   layers:
   - Default
   - TransparentFX
@@ -33,7 +34,7 @@ TagManager:
   - PlayerNope
   - DisposalArea
   - EnvironmentInvis
-  - 
+  - Interacatable
   - 
   - 
   - 

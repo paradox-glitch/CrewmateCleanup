@@ -13,6 +13,8 @@ public class ParticleDecalPool : MonoBehaviour
 
     public int _MaxDecals;
 
+    public Gradient m_BloodGradient;
+
     private ParticleSystem.Particle[] m_particles;
 
     private ParticleSystem decalsystem;
@@ -51,6 +53,23 @@ public class ParticleDecalPool : MonoBehaviour
         particleData[_ppdIndex].color = _cg.Evaluate(Random.Range(0f, 1f));
         particleData[_ppdIndex].clean = false;
         _ppdIndex++;
+    }
+
+    public void SetParticalDataDirect(Vector3 a_Position, Vector2 a_Rotation)
+    {
+        if (_ppdIndex >= _MaxDecals)
+        {
+            _ppdIndex = 0;
+        }
+        particleData[_ppdIndex].position = a_Position;
+        Vector3 DecalRotQual = Quaternion.LookRotation(a_Rotation).eulerAngles;
+        DecalRotQual.z = Random.Range(0, 360);
+        particleData[_ppdIndex].rotation = DecalRotQual;
+        particleData[_ppdIndex].size = Random.Range(m_DecalSizeMin, m_DecalSizeMax);
+        particleData[_ppdIndex].color = m_BloodGradient.Evaluate(Random.Range(0f, 1f));
+        particleData[_ppdIndex].clean = false;
+        _ppdIndex++;
+        DisplayParticles();
     }
 
     void DisplayParticles()

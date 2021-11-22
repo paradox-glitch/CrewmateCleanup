@@ -7,13 +7,14 @@ public class SplatOnCollision : MonoBehaviour {
 	public ParticleSystem particleLauncher;
 	public Gradient particleColorGradient;
 	public ParticleDecalPool dropletDecalPool;
-
+	public GameObject m_LevelManager;
 	List<ParticleCollisionEvent> collisionEvents;
 
 
 	void Start () 
 	{
 		collisionEvents = new List<ParticleCollisionEvent> ();
+		m_LevelManager = GameObject.FindGameObjectWithTag("Manager.Level");
 	}
 
 	void OnParticleCollision(GameObject other)
@@ -29,7 +30,7 @@ public class SplatOnCollision : MonoBehaviour {
             dropletDecalPool.ParticleHit(collisionEvents[i], particleColorGradient);
             i++;
 		}
-
+		m_LevelManager.GetComponent<LevelManager>().SendMessage("DoCheck");
 	}
 
 }

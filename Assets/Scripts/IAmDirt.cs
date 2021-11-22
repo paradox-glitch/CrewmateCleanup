@@ -4,20 +4,9 @@ using UnityEngine;
 
 public class IAmDirt : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    void CleanUp(GameObject a_Player)
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-    void CleanUp()
-    {
+        a_Player.SendMessage("SmallDirtCleaned");
         Destroy(this.gameObject);
     }
 }

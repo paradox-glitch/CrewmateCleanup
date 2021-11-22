@@ -62,8 +62,7 @@ public class DiscordController : MonoBehaviour
       {
           var currentUser = userManager.GetCurrentUser();
 
-          PlayerPrefs.SetString("UserID", "" + Guid.NewGuid());
-          PlayerPrefs.SetString("DiscordUserID", "" + currentUser.Id);
+          PlayerPrefs.SetString("UserID", currentUser.Id.ToString());
           PlayerPrefs.SetString("Username", currentUser.Username);
           PlayerPrefs.Save();
           _userGrab = true;

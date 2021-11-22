@@ -23,7 +23,7 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _discordErrorText, _guestErrorText;
 
     [Header("MainMenu")]
-    [SerializeField] private GameObject _mainMenuPanel;
+    [SerializeField] private GameObject _mainMenuPanel, m_PlayerPrefab;
 
     private void Awake()
     {
@@ -74,13 +74,17 @@ public class MainMenu : MonoBehaviour
         _loginPanel.SetActive(false);
         _mainMenuPanel.SetActive(false);
         _consentPanel.SetActive(true);
+        PlayerPrefs.SetInt("CrewmateColor", 1);
+        PlayerPrefs.Save();
     }
 
     void MenuSetup()
     {
         _consentPanel.SetActive(false);
         _loginPanel.SetActive(false);
-        _mainMenuPanel.SetActive(true);
+        //_mainMenuPanel.SetActive(true);
+
+        Instantiate(m_PlayerPrefab, transform.GetChild(0).transform.position + Vector3.up, transform.GetChild(0).transform.rotation);
     }
 
     public void LoginSetup()
@@ -116,9 +120,6 @@ public class MainMenu : MonoBehaviour
 
         if (testv != AnalyticsResult.Ok)
             Debug.Log("fuck shit bad");
-        else if (testv == AnalyticsResult.Ok)
-            Debug.Log("nice");
-
 
         Analytics.CustomEvent("userLogin");
 

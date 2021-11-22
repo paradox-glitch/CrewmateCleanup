@@ -10,12 +10,15 @@ public class ParticleLauncher : MonoBehaviour
 
     public ParticleDecalPool pool;
 
+    public GameObject m_LevelManager;
+
     public Gradient m_ParticleColor;
 
     List<ParticleCollisionEvent> m_CollisionEvents;
 
     void Start()
     {
+        m_LevelManager = GameObject.FindGameObjectWithTag("Manager.Level");
         pool = GameObject.FindGameObjectWithTag("SpaltDecalPool").GetComponent<ParticleDecalPool>();
         m_SplatterParticle = GameObject.FindGameObjectWithTag("SplatParticles").GetComponent<ParticleSystem>();
         m_CollisionEvents = new List<ParticleCollisionEvent>();
@@ -48,5 +51,6 @@ public class ParticleLauncher : MonoBehaviour
             pool.ParticleHit(m_CollisionEvents[i], m_ParticleColor);
             EmitAtSplatterLocation(m_CollisionEvents[i]);
     }
+        m_LevelManager.GetComponent<LevelManager>().SendMessage("DoCheck");
     }
 }
