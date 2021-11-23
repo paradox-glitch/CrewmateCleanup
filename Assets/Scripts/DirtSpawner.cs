@@ -1,10 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEditor;
 using UnityEngine.UIElements;
-using UnityEditor.UIElements;
 using sys = System;
+
+#if UNITY_EDITOR
+using UnityEditor;
+using UnityEditor.UIElements;
+#endif
 
 public class DirtSpawner : MonoBehaviour
 {
@@ -49,6 +52,7 @@ public class DirtSpawner : MonoBehaviour
 
 }
 
+#if UNITY_EDITOR
 [CustomEditor(typeof(DirtSpawner))]
 public class DirtSpawnerEditor : Editor
 {
@@ -132,4 +136,6 @@ public class DirtSpawnerEditor : Editor
         serializedObject.Update();
         serializedObject.ApplyModifiedProperties();
     }
+
 }
+#endif

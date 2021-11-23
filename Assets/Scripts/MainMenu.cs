@@ -33,10 +33,12 @@ public class MainMenu : MonoBehaviour
 
         if (AnalyticsSessionInfo.sessionFirstRun)
         {
+            DiscordWebhooks.AddLineToTextFile("Log", "No Previous User LogOn Detected");
             ConsentSetup();
         }
         else
         {
+            DiscordWebhooks.AddLineToTextFile("Log", "Previous User LogOn Detected, Reirected user past data concent and sign in");
             //MenuSetup();
             ConsentSetup();
         }
@@ -52,6 +54,7 @@ public class MainMenu : MonoBehaviour
 
     public void DidCheck()
     {
+        DiscordWebhooks.AddLineToTextFile("Log", "User Concented To Data Collection");
         _consentNext.interactable = _consentCheck.isOn;
     }
 
@@ -80,6 +83,15 @@ public class MainMenu : MonoBehaviour
 
     void MenuSetup()
     {
+        DiscordWebhooks.AddLineToTextFile("Log", "-----");
+        DiscordWebhooks.AddLineToTextFile("Log", "Username: " + PlayerPrefs.GetString("Username"));
+        DiscordWebhooks.AddLineToTextFile("Log", "UserID: " + PlayerPrefs.GetString("UserID"));
+        DiscordWebhooks.AddLineToTextFile("Log", "Session Number: " + AnalyticsSessionInfo.sessionCount);
+        DiscordWebhooks.AddLineToTextFile("Log", "Session ID: " + AnalyticsSessionInfo.sessionId);
+        DiscordWebhooks.AddLineToTextFile("Log", "Analytics UserID: " + AnalyticsSessionInfo.userId);
+        DiscordWebhooks.AddLineToTextFile("Log", "-----");
+
+
         _consentPanel.SetActive(false);
         _loginPanel.SetActive(false);
         //_mainMenuPanel.SetActive(true);
@@ -102,6 +114,7 @@ public class MainMenu : MonoBehaviour
 
     void DiscordLoginSuccsess()
     {
+        DiscordWebhooks.AddLineToTextFile("Log", "User Login With Discord");
         StartCoroutine(test());
     }
 
@@ -147,7 +160,10 @@ public class MainMenu : MonoBehaviour
         PlayerPrefs.SetString("Username", _usernameInput.text);
         PlayerPrefs.Save();
 
-        SendMessage("DiscordLoginSuccsess");
+        DiscordWebhooks.AddLineToTextFile("Log", "User Playing as Guest");
+
+
+        StartCoroutine(test());
     }
 
     private static bool DiscordRunning()

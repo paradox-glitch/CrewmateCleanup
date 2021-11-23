@@ -30,8 +30,7 @@ public class OptionsMenu : MonoBehaviour
         PlayerPrefs.SetInt("CrewmateColor", a_ColorIndex);
         PlayerPrefs.Save();
         m_PlayerGameobject.SendMessage("ChangeColor");
-        //string l_Payload = DiscordWebhooks.PayloadBuilder(a_Content: "Player Choose Color: " + m_PlayerGameobject.transform.GetChild(0).GetComponent<Renderer>().material.name);
-        //DiscordWebhooks.PostToDiscord(a_Payload: l_Payload);
+        DiscordWebhooks.AddLineToTextFile("Log", "Player Choose Color: " + m_PlayerGameobject.transform.GetChild(0).GetComponent<Renderer>().material.name);
     }
 
 
@@ -45,6 +44,8 @@ public class OptionsMenu : MonoBehaviour
         }
         if(m_PlayerGameobject != null)
         {
+            DiscordWebhooks.AddLineToTextFile("Log", "---");
+            DiscordWebhooks.AddLineToTextFile("Log", "Player Opened Laptop");
             CrewmateSetUp();
             m_PlayerGameobject.SendMessage("AddPauseReason");
         }
@@ -53,6 +54,7 @@ public class OptionsMenu : MonoBehaviour
 
     public void CrewmateSetUp()
     {
+        DiscordWebhooks.AddLineToTextFile("Log", "Player On Crewmate Panel");
         m_mainmenu.SetActive(true);
         m_Creewmat.SetActive(true);
         m_Options.SetActive(false);
@@ -61,6 +63,7 @@ public class OptionsMenu : MonoBehaviour
 
     public void OptionsSetUp()
     {
+        DiscordWebhooks.AddLineToTextFile("Log", "Player On Settings Panel");
         m_mainmenu.SetActive(true);
         m_Creewmat.SetActive(false);
         m_Options.SetActive(true);
@@ -69,6 +72,7 @@ public class OptionsMenu : MonoBehaviour
 
     public void FeedbackSetUp()
     {
+        DiscordWebhooks.AddLineToTextFile("Log", "Player On Feedback Panel");
         m_mainmenu.SetActive(true);
         m_Creewmat.SetActive(false);
         m_Options.SetActive(false);
@@ -77,6 +81,8 @@ public class OptionsMenu : MonoBehaviour
 
     public void Close()
     {
+        DiscordWebhooks.AddLineToTextFile("Log", "Player Left Laptop");
+        DiscordWebhooks.AddLineToTextFile("Log", "---");
         m_PlayerGameobject.SendMessage("RemovePauseReason");
         m_Creewmat.SetActive(false);
         m_Options.SetActive(false);

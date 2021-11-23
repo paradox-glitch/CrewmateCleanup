@@ -1,8 +1,11 @@
 using System.Collections.Generic;
 using System.Collections;
-using UnityEditor;
 using UnityEngine;
+
+#if UNITY_EDITOR
+using UnityEditor;
 using UnityEditorInternal;
+#endif
 
 public class BloodSpawner : MonoBehaviour
 {
@@ -16,7 +19,7 @@ public class BloodSpawner : MonoBehaviour
 
     GameObject m_SplatDecalPool;
 
-    public LayerMask m_Enviroment = 7;
+    private LayerMask m_Enviroment = 1 << 8;
 
     bool test = false;
 
@@ -25,6 +28,7 @@ public class BloodSpawner : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        Debug.Log(m_Enviroment.value);
         m_SplatDecalPool = GameObject.FindGameObjectWithTag("SpaltDecalPool");
 
         StartCoroutine(WaitToSpawn());
@@ -32,6 +36,7 @@ public class BloodSpawner : MonoBehaviour
 
     IEnumerator WaitToSpawn()
     {
+
 
         for (int i = 0; i < areas; i++)
         {
@@ -53,8 +58,9 @@ public class BloodSpawner : MonoBehaviour
                 RaycastHit l_Hit;
 
                 Ray ray = new Ray(lmaovector, -transform.up);
-                if (Physics.Raycast(ray, out l_Hit, m_Enviroment))
+                if (Physics.Raycast(ray, out l_Hit, 200f, m_Enviroment))
                 {
+                    Debug.Log(l_Hit.collider.gameObject.layer);
                     m_SplatDecalPool.GetComponent<ParticleDecalPool>().SetParticalDataDirect(l_Hit.point + (0.01f * Vector3.up), -transform.up);
                     test = false;
                     tt = -10000;
@@ -66,8 +72,12 @@ public class BloodSpawner : MonoBehaviour
         }
         yield return new WaitForEndOfFrame();
         yield return new WaitForFixedUpdate();
-    }
 
+    }
+}
+
+
+#if UNITY_EDITOR
     [CustomEditor(typeof(BloodSpawner))]
     public class BloodSpawnerEditor : Editor
     {
@@ -130,8 +140,8 @@ public class BloodSpawner : MonoBehaviour
             int oldareas = mp.areas;
             mp.areas = EditorGUILayout.IntSlider("Number of Spawn Areas", mp.areas, 0, 100);
 
-            LayerMask tempMask = EditorGUILayout.MaskField(InternalEditorUtility.LayerMaskToConcatenatedLayersMask(mp.m_Enviroment), InternalEditorUtility.layers);
-            mp.m_Enviroment = InternalEditorUtility.ConcatenatedLayersMaskToLayerMask(tempMask); ;
+            //mp.m_Enviroment = EditorGUILayout.MaskField(mp.m_Enviroment, InternalEditorUtility.layers);
+            //Debug.Log(mp.m_Enviroment.value);
 
             EditorGUILayout.LabelField("");
             for (int i = 0; i < mp.areas; i++)
@@ -150,4 +160,4 @@ public class BloodSpawner : MonoBehaviour
             serializedObject.ApplyModifiedProperties();
         }
     }
-}
+#endif
