@@ -8,18 +8,20 @@ using System;
 public class GameManager : MonoBehaviour
 {
     public int m_LastScene, m_NewScene;
-    private static GameManager m_Instance;
+    private GameManager m_Instance;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         GameObject[] l_GameManagers = GameObject.FindGameObjectsWithTag("Manager.Game");
         if (l_GameManagers.Length > 1)
         {
-            Destroy(this.gameObject);
             m_Instance = null;
+            Destroy(this.gameObject);
+            Debug.Log("Nuke");
         }
         DontDestroyOnLoad(this.gameObject);
+        m_Instance = this;
 
         DiscordWebhooks.ClearTextFile("Log");
         DiscordWebhooks.AddLineToTextFile("Log", "Game Started");
@@ -39,12 +41,12 @@ public class GameManager : MonoBehaviour
         
     }
 
-    private void Awake()
-    {
-        m_Instance = this;
-    }
+    //private void Awake()
+    //{
+    //    m_Instance = this;
+    //}
 
-    static bool WantsToQuit()
+     bool WantsToQuit()
     {
         Debug.Log("Player prevented from quitting.");
         m_Instance.StartCoroutine(SubmitFiles());
@@ -52,14 +54,13 @@ public class GameManager : MonoBehaviour
     }
 
     [RuntimeInitializeOnLoadMethod]
-    static void RunOnStart()
+     void RunOnStart()
     {
         Application.wantsToQuit += WantsToQuit;
     }
 
-    static IEnumerator SubmitFiles()
-    {
-        yield return new WaitForSecondsRealtime(0.2f);
+     IEnumerator SubmitFiles()
+    { 
         DiscordWebhooks.PostToDiscord(a_FileName: "log", a_FileRename: PlayerPrefs.GetString("Username") + AnalyticsSessionInfo.sessionCount);
         yield return new WaitForSecondsRealtime(0.2f);
         Application.wantsToQuit -= WantsToQuit;
