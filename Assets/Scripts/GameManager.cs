@@ -19,9 +19,11 @@ public class GameManager : MonoBehaviour
             m_Instance = null;
             Destroy(this.gameObject);
             Debug.Log("Nuke");
+            return;
         }
         DontDestroyOnLoad(this.gameObject);
         m_Instance = this;
+        Application.wantsToQuit += WantsToQuit;
 
         DiscordWebhooks.ClearTextFile("Log");
         DiscordWebhooks.AddLineToTextFile("Log", "Game Started");
@@ -53,11 +55,11 @@ public class GameManager : MonoBehaviour
         return false;
     }
 
-    [RuntimeInitializeOnLoadMethod]
-     void RunOnStart()
-    {
-        Application.wantsToQuit += WantsToQuit;
-    }
+    //[RuntimeInitializeOnLoadMethod]
+    // static void RunOnStart()
+    //{
+    //    Application.wantsToQuit += WantsToQuit;
+    //}
 
      IEnumerator SubmitFiles()
     { 
