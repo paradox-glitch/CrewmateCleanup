@@ -170,7 +170,7 @@ public class PlayerController : MonoBehaviour
         if(m_SmallDirtCleaned >= m_SmallDirtTarget)
         {
             Instantiate(m_Bag, m_MouseRayHit.point + Vector3.up, transform.rotation);
-            m_SmallDirtTarget = UnityEngine.Random.Range(7, 16);
+            m_SmallDirtTarget = UnityEngine.Random.Range(16, 20);
             m_SmallDirtCleaned = 0;
         }
     }

@@ -125,12 +125,18 @@ public class DirtSpawnerEditor : Editor
         {
             EditorGUILayout.LabelField("Area" + (i + 1));
             mp.data[i].seed = EditorGUILayout.TextField("Seed", mp.data[i].seed);
-            mp.data[i].dirtToSpawn = EditorGUILayout.IntField("Dirt To Spawn", mp.data[i].dirtToSpawn);
+            int tempdirt = EditorGUILayout.IntField("Dirt To Spawn", mp.data[i].dirtToSpawn);
             mp.data[i].xMin.x = EditorGUILayout.FloatField("X Min", mp.data[i].xMin.x);
             mp.data[i].xMax.x = EditorGUILayout.FloatField("X Max", mp.data[i].xMax.x);
             mp.data[i].zMin.z = EditorGUILayout.FloatField("Z Min", mp.data[i].zMin.z);
             mp.data[i].zMax.z = EditorGUILayout.FloatField("Z Max", mp.data[i].zMax.z);
             EditorGUILayout.LabelField("");
+
+            if (EditorGUI.EndChangeCheck())
+            {
+                Undo.RecordObject(mp, "Change Look At Target Position");
+                mp.data[i].dirtToSpawn = tempdirt;
+            }
         }
 
         serializedObject.Update();

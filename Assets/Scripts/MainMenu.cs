@@ -25,6 +25,9 @@ public class MainMenu : MonoBehaviour
     [Header("MainMenu")]
     [SerializeField] private GameObject _mainMenuPanel, m_PlayerPrefab;
 
+    public GameObject[] questions = new GameObject[8];
+    public GameObject ddd;
+
     private void Awake()
     {
         Analytics.enabled = true;
@@ -164,6 +167,25 @@ public class MainMenu : MonoBehaviour
 
 
         StartCoroutine(test());
+    }
+
+    public void SubmitForm()
+    {
+        string[] feilds = new string[8];
+
+        for(int i = 0; i < questions.Length; i++)
+        {
+            feilds[i] = DiscordWebhooks.FeildBuilder(questions[i].GetComponent<TextMeshProUGUI>().text, questions[i].transform.GetChild(0).gameObject.GetComponent<TMP_InputField>().text);
+        }
+
+
+        string dd = DiscordWebhooks.FeildBuilder(ddd.GetComponent<TextMeshProUGUI>().text, ddd.transform.GetChild(0).gameObject.GetComponent<TMP_Dropdown>().options[ddd.transform.GetChild(0).gameObject.GetComponent<TMP_Dropdown>().value].text);
+
+        string f = DiscordWebhooks.FeildsConstructor(feilds[0], feilds[1], feilds[2], feilds[3], feilds[4], feilds[5], feilds[6], feilds[7], dd);
+        string e = DiscordWebhooks.EmbedBuilder(a_Color: Color.magenta, a_Title: "Player Feedback", a_Feilds: f, a_FooterText: Application.version.ToString());
+        string ec = DiscordWebhooks.EmbedsConstructor(e);
+        string pay = DiscordWebhooks.PayloadBuilder(a_Username: PlayerPrefs.GetString("Username") + " | " + PlayerPrefs.GetString("UserID"), a_Embeds: ec);
+        DiscordWebhooks.PostToDiscord(a_Payload: pay);
     }
 
     private static bool DiscordRunning()

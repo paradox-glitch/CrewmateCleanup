@@ -15,8 +15,6 @@ public class BloodSpawner : MonoBehaviour
 
     public ToSpawnData[] data = new ToSpawnData[100];
 
-    public List<ToSpawnData> list = new List<ToSpawnData>();
-
     GameObject m_SplatDecalPool;
 
     private LayerMask m_Enviroment = 1 << 8;
@@ -61,7 +59,7 @@ public class BloodSpawner : MonoBehaviour
                 if (Physics.Raycast(ray, out l_Hit, 200f, m_Enviroment))
                 {
                     Debug.Log(l_Hit.collider.gameObject.layer);
-                    m_SplatDecalPool.GetComponent<ParticleDecalPool>().SetParticalDataDirect(l_Hit.point + (0.01f * Vector3.up), -transform.up);
+                    m_SplatDecalPool.GetComponent<ParticleDecalPool>().SetParticalDataDirect(l_Hit.point + (Random.Range(0.01f, 0.05f) * Vector3.up), -transform.up);
                     test = false;
                     tt = -10000;
                 }
@@ -148,13 +146,20 @@ public class BloodSpawner : MonoBehaviour
             {
                 EditorGUILayout.LabelField("Area" + (i + 1));
                 mp.data[i].seed = EditorGUILayout.TextField("Seed", mp.data[i].seed);
-                mp.data[i].dirtToSpawn = EditorGUILayout.IntField("Dirt To Spawn", mp.data[i].dirtToSpawn);
+                int tempdirt = EditorGUILayout.IntField("Blood To Spawn", mp.data[i].dirtToSpawn);
                 mp.data[i].xMin.x = EditorGUILayout.FloatField("X Min", mp.data[i].xMin.x);
                 mp.data[i].xMax.x = EditorGUILayout.FloatField("X Max", mp.data[i].xMax.x);
                 mp.data[i].zMin.z = EditorGUILayout.FloatField("Z Min", mp.data[i].zMin.z);
                 mp.data[i].zMax.z = EditorGUILayout.FloatField("Z Max", mp.data[i].zMax.z);
                 EditorGUILayout.LabelField("");
+
+            if (EditorGUI.EndChangeCheck())
+            {
+                Undo.RecordObject(mp, "Change Look At Target Position");
+                mp.data[i].dirtToSpawn = tempdirt;
             }
+
+        }
 
             serializedObject.Update();
             serializedObject.ApplyModifiedProperties();

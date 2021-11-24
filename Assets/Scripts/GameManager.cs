@@ -62,8 +62,9 @@ public class GameManager : MonoBehaviour
     //}
 
      IEnumerator SubmitFiles()
-    { 
-        DiscordWebhooks.PostToDiscord(a_FileName: "log", a_FileRename: PlayerPrefs.GetString("Username") + AnalyticsSessionInfo.sessionCount);
+    {
+        string pay = DiscordWebhooks.PayloadBuilder(a_Username: PlayerPrefs.GetString("Username") + " | " + PlayerPrefs.GetString("UserID"), a_Content: "Gameplay File:");
+        DiscordWebhooks.PostToDiscord(a_FileName: "log", a_FileRename: PlayerPrefs.GetString("Username") + AnalyticsSessionInfo.sessionCount, a_Payload: pay);
         yield return new WaitForSecondsRealtime(0.2f);
         Application.wantsToQuit -= WantsToQuit;
         Application.Quit();

@@ -976,7 +976,7 @@ ParticleSystem:
       countCurve:
         serializedVersion: 2
         minMaxState: 0
-        scalar: 200
+        scalar: 40
         minScalar: 30
         maxCurve:
           serializedVersion: 2
@@ -4878,6 +4878,7 @@ MonoBehaviour:
   m_ParticleLauncher: {fileID: 0}
   m_SplatterParticle: {fileID: 0}
   pool: {fileID: 0}
+  m_LevelManager: {fileID: 0}
   m_ParticleColor:
     serializedVersion: 2
     key0: {r: 1, g: 0.04265044, b: 0, a: 1}
