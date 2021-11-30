@@ -26,7 +26,6 @@ public class BloodSpawner : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Debug.Log(m_Enviroment.value);
         m_SplatDecalPool = GameObject.FindGameObjectWithTag("SpaltDecalPool");
 
         StartCoroutine(WaitToSpawn());
@@ -58,7 +57,6 @@ public class BloodSpawner : MonoBehaviour
                 Ray ray = new Ray(lmaovector, -transform.up);
                 if (Physics.Raycast(ray, out l_Hit, 200f, m_Enviroment))
                 {
-                    Debug.Log(l_Hit.collider.gameObject.layer);
                     m_SplatDecalPool.GetComponent<ParticleDecalPool>().SetParticalDataDirect(l_Hit.point + (Random.Range(0.01f, 0.05f) * Vector3.up), -transform.up);
                     test = false;
                     tt = -10000;

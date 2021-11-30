@@ -19,7 +19,6 @@ public class GameManager : MonoBehaviour
         {
             m_Instance = null;
             Destroy(this.gameObject);
-            Debug.Log("Nuke");
             return;
         }
         DontDestroyOnLoad(this.gameObject);
@@ -83,7 +82,6 @@ public class GameManager : MonoBehaviour
 
      bool WantsToQuit()
     {
-        Debug.Log("Player prevented from quitting.");
         m_Instance.StartCoroutine(SubmitFiles());
         return false;
     }

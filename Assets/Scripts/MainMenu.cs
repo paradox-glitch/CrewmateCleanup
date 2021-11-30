@@ -34,8 +34,9 @@ public class MainMenu : MonoBehaviour
 
         //PlayerPrefs.DeleteAll();
 
-        if (AnalyticsSessionInfo.sessionFirstRun || !PlayerPrefs.HasKey("Username"))
+        if (!PlayerPrefs.HasKey("Username"))
         {
+
             DiscordWebhooks.AddLineToTextFile("Log", "No Previous User LogOn Detected");
             ConsentSetup();
         }

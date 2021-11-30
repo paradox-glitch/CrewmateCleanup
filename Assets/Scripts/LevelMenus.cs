@@ -19,8 +19,6 @@ public class LevelMenus : MonoBehaviour
             PlayerPrefs.Save();
         }
 
-        Debug.Log(PlayerPrefs.GetInt("CurrentLevel"));
-
         for (int i=0; i <= PlayerPrefs.GetInt("CurrentLevel"); i++)
         {
             buttons[i].interactable = true;
