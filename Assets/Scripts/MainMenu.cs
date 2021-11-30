@@ -48,7 +48,7 @@ public class MainMenu : MonoBehaviour
 
     public void DidScroll()
     {
-        if (_policyScroll.value <= 0)
+        if (_policyScroll.value <= 0f)
         {
             _consentCheck.interactable = true;
         }
