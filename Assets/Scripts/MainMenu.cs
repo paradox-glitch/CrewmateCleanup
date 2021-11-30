@@ -32,18 +32,17 @@ public class MainMenu : MonoBehaviour
     {
         Analytics.enabled = true;
 
-        PlayerPrefs.DeleteAll();
+        //PlayerPrefs.DeleteAll();
 
-        if (AnalyticsSessionInfo.sessionFirstRun)
+        if (AnalyticsSessionInfo.sessionFirstRun || !PlayerPrefs.HasKey("Username"))
         {
             DiscordWebhooks.AddLineToTextFile("Log", "No Previous User LogOn Detected");
             ConsentSetup();
         }
         else
         {
-            DiscordWebhooks.AddLineToTextFile("Log", "Previous User LogOn Detected, Reirected user past data concent and sign in");
-            //MenuSetup();
-            ConsentSetup();
+            DiscordWebhooks.AddLineToTextFile("Log", "Previous User LogOn Detected, Reirected user past data Consent and sign in");
+            MenuSetup();
         }
     }
 
@@ -57,7 +56,7 @@ public class MainMenu : MonoBehaviour
 
     public void DidCheck()
     {
-        DiscordWebhooks.AddLineToTextFile("Log", "User Concented To Data Collection");
+        DiscordWebhooks.AddLineToTextFile("Log", "User Consented To Data Collection");
         _consentNext.interactable = _consentCheck.isOn;
     }
 
@@ -77,6 +76,7 @@ public class MainMenu : MonoBehaviour
 
     void ConsentSetup()
     {
+        AnalyticsEvent.ScreenVisit("Consent Form");
         _loginPanel.SetActive(false);
         _mainMenuPanel.SetActive(false);
         _consentPanel.SetActive(true);
@@ -86,24 +86,38 @@ public class MainMenu : MonoBehaviour
 
     void MenuSetup()
     {
-        DiscordWebhooks.AddLineToTextFile("Log", "-----");
-        DiscordWebhooks.AddLineToTextFile("Log", "Username: " + PlayerPrefs.GetString("Username"));
-        DiscordWebhooks.AddLineToTextFile("Log", "UserID: " + PlayerPrefs.GetString("UserID"));
-        DiscordWebhooks.AddLineToTextFile("Log", "Session Number: " + AnalyticsSessionInfo.sessionCount);
-        DiscordWebhooks.AddLineToTextFile("Log", "Session ID: " + AnalyticsSessionInfo.sessionId);
-        DiscordWebhooks.AddLineToTextFile("Log", "Analytics UserID: " + AnalyticsSessionInfo.userId);
-        DiscordWebhooks.AddLineToTextFile("Log", "-----");
+        DiscordWebhooks.AddLineToTextFile("Log", "---");
+            DiscordWebhooks.AddLineToTextFile("Log", "Username: " + PlayerPrefs.GetString("Username"));
+            DiscordWebhooks.AddLineToTextFile("Log", "UserID: " + PlayerPrefs.GetString("UserID"));
+            DiscordWebhooks.AddLineToTextFile("Log", "Session Number: " + AnalyticsSessionInfo.sessionCount);
+            DiscordWebhooks.AddLineToTextFile("Log", "Session ID: " + AnalyticsSessionInfo.sessionId);
+            DiscordWebhooks.AddLineToTextFile("Log", "Analytics UserID: " + AnalyticsSessionInfo.userId);
+            if(PlayerPrefs.HasKey("TutorialDone"))
+            DiscordWebhooks.AddLineToTextFile("Log", "Tutorial Done: Yes");
+            else
+            DiscordWebhooks.AddLineToTextFile("Log", "Tutorial Done: No");
+
+        DiscordWebhooks.AddLineToTextFile("Log", "---");
+
+
+        string embed = DiscordWebhooks.EmbedBuilder(Color.blue, "Player Started The Game", PlayerPrefs.GetString("Username") + " | " + PlayerPrefs.GetString("UserID"));
+        embed = DiscordWebhooks.EmbedsConstructor(embed);
+
+        string pay = DiscordWebhooks.PayloadBuilder(a_Username: PlayerPrefs.GetString("Username") + " | " + PlayerPrefs.GetString("UserID"), a_Embeds: embed);
+        DiscordWebhooks.PostToDiscord(a_Payload: pay);
 
 
         _consentPanel.SetActive(false);
         _loginPanel.SetActive(false);
-        //_mainMenuPanel.SetActive(true);
+        _mainMenuPanel.SetActive(false);
 
         Instantiate(m_PlayerPrefab, transform.GetChild(0).transform.position + Vector3.up, transform.GetChild(0).transform.rotation);
     }
 
     public void LoginSetup()
     {
+        AnalyticsEvent.ScreenVisit("Login");
+
         _consentPanel.SetActive(false);
         _mainMenuPanel.SetActive(false);
         _loginPanel.SetActive(true);
@@ -118,6 +132,7 @@ public class MainMenu : MonoBehaviour
     void DiscordLoginSuccsess()
     {
         DiscordWebhooks.AddLineToTextFile("Log", "User Login With Discord");
+        AnalyticsEvent.UserSignup(new AuthorizationNetwork());
         StartCoroutine(test());
     }
 
@@ -169,19 +184,39 @@ public class MainMenu : MonoBehaviour
         StartCoroutine(test());
     }
 
+    public void ButtonLogOut()
+    {
+        PlayerPrefs.DeleteAll();
+        DiscordWebhooks.AddLineToTextFile("Log", "User Logout");
+        GameObject.FindGameObjectWithTag("Manager.Game").GetComponent<GameManager>().LoadNewScene(
+    0,
+    0);
+    }
+
     public void SubmitForm()
     {
         string[] feilds = new string[8];
 
         for(int i = 0; i < questions.Length; i++)
         {
-            feilds[i] = DiscordWebhooks.FeildBuilder(questions[i].GetComponent<TextMeshProUGUI>().text, questions[i].transform.GetChild(0).gameObject.GetComponent<TMP_InputField>().text);
+            string l_text = "N/A";
+            if(questions[i].transform.GetChild(0).gameObject.GetComponent<TMP_InputField>().text != "" && questions[i].transform.GetChild(0).gameObject.GetComponent<TMP_InputField>().text != null && questions[i].transform.GetChild(0).gameObject.GetComponent<TMP_InputField>().text != " ")
+            {
+                l_text = questions[i].transform.GetChild(0).gameObject.GetComponent<TMP_InputField>().text;
+                l_text = l_text.Replace("\r", "").Replace("\n", "");
+            }
+
+            feilds[i] = DiscordWebhooks.FeildBuilder(questions[i].GetComponent<TextMeshProUGUI>().text, l_text);
+            questions[i].transform.GetChild(0).gameObject.GetComponent<TMP_InputField>().text = "";
         }
 
 
         string dd = DiscordWebhooks.FeildBuilder(ddd.GetComponent<TextMeshProUGUI>().text, ddd.transform.GetChild(0).gameObject.GetComponent<TMP_Dropdown>().options[ddd.transform.GetChild(0).gameObject.GetComponent<TMP_Dropdown>().value].text);
 
+        ddd.transform.GetChild(0).gameObject.GetComponent<TMP_Dropdown>().value = 0;
+
         string f = DiscordWebhooks.FeildsConstructor(feilds[0], feilds[1], feilds[2], feilds[3], feilds[4], feilds[5], feilds[6], feilds[7], dd);
+        DiscordWebhooks.AddLineToTextFile("Log", f);
         string e = DiscordWebhooks.EmbedBuilder(a_Color: Color.magenta, a_Title: "Player Feedback", a_Feilds: f, a_FooterText: Application.version.ToString());
         string ec = DiscordWebhooks.EmbedsConstructor(e);
         string pay = DiscordWebhooks.PayloadBuilder(a_Username: PlayerPrefs.GetString("Username") + " | " + PlayerPrefs.GetString("UserID"), a_Embeds: ec);

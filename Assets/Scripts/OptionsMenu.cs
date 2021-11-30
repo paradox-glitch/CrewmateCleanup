@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 using UnityEngine;
+using UnityEngine.Analytics;
 using TMPro;
 
 public class OptionsMenu : MonoBehaviour
@@ -54,6 +55,7 @@ public class OptionsMenu : MonoBehaviour
 
     public void CrewmateSetUp()
     {
+        AnalyticsEvent.ScreenVisit("Customise");
         DiscordWebhooks.AddLineToTextFile("Log", "Player On Crewmate Panel");
         m_mainmenu.SetActive(true);
         m_Creewmat.SetActive(true);
@@ -63,6 +65,7 @@ public class OptionsMenu : MonoBehaviour
 
     public void OptionsSetUp()
     {
+        AnalyticsEvent.ScreenVisit("Options");
         DiscordWebhooks.AddLineToTextFile("Log", "Player On Settings Panel");
         m_mainmenu.SetActive(true);
         m_Creewmat.SetActive(false);
@@ -72,6 +75,7 @@ public class OptionsMenu : MonoBehaviour
 
     public void FeedbackSetUp()
     {
+        AnalyticsEvent.ScreenVisit("Feedback");
         DiscordWebhooks.AddLineToTextFile("Log", "Player On Feedback Panel");
         m_mainmenu.SetActive(true);
         m_Creewmat.SetActive(false);

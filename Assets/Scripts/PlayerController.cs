@@ -266,23 +266,27 @@ public class PlayerController : MonoBehaviour
 
         if (l_InteractionObject.CompareTag("Tool.Brush"))
         {
+            DiscordWebhooks.AddLineToTextFile("Log", TimeSpan.FromSeconds((int)Time.timeSinceLevelLoad).ToString() + " | " + "Picked Up Brush", false);
             m_CurrentHandItem = m_HandItems.Brush;
         }
         else if (l_InteractionObject.CompareTag("Tool.CattleProd"))
         {
-
+            DiscordWebhooks.AddLineToTextFile("Log", TimeSpan.FromSeconds((int)Time.timeSinceLevelLoad).ToString() + " | " + "Picked Up CattleProd", false);
             m_CurrentHandItem = m_HandItems.CattleProd;
         }
         else if (l_InteractionObject.CompareTag("Tool.MegaPhone"))
         {
+            DiscordWebhooks.AddLineToTextFile("Log", TimeSpan.FromSeconds((int)Time.timeSinceLevelLoad).ToString() + " | " + "Picked Up MegaPhone", false);
             m_CurrentHandItem = m_HandItems.MegaPhone;
         }
         else if (l_InteractionObject.CompareTag("Pickup.Mop"))
         {
+            DiscordWebhooks.AddLineToTextFile("Log", TimeSpan.FromSeconds((int)Time.timeSinceLevelLoad).ToString() + " | " + "Picked Up Mop", false);
             m_CurrentHandItem = m_HandItems.Mop;
         }
         else if (l_InteractionObject.CompareTag("Tool.Gloves"))
         {
+            DiscordWebhooks.AddLineToTextFile("Log", TimeSpan.FromSeconds((int)Time.timeSinceLevelLoad).ToString() + " | " + "Picked Up Gloves", false);
             m_CurrentHandItem = m_HandItems.Gloves;
         }
 
@@ -310,7 +314,9 @@ public class PlayerController : MonoBehaviour
         {
             DoBodyDrag(true);
         }
-            
+
+        DiscordWebhooks.AddLineToTextFile("Log", TimeSpan.FromSeconds((int)Time.timeSinceLevelLoad).ToString() + " | " + "Dropped " + m_HandPosition.transform.GetChild(0).gameObject.name, false);
+
 
         m_HandPosition.transform.GetChild(0).gameObject.AddComponent<Rigidbody>();
         m_HandPosition.transform.GetChild(0).GetComponent<Collider>().enabled = true;
@@ -379,6 +385,7 @@ public class PlayerController : MonoBehaviour
 
     void DoDamage()
     {
+        DiscordWebhooks.AddLineToTextFile("Log", TimeSpan.FromSeconds((int)Time.timeSinceLevelLoad).ToString() + " | " + "Player Damaged at: " + transform.position, false);
         m_PlayerHealth--;
         m_CharacterController.enabled = false;
         m_InputEnabled += 1;
@@ -401,7 +408,7 @@ public class PlayerController : MonoBehaviour
     {
         yield return new WaitForSeconds(1.2f);
         transform.position = m_LevelManager.transform.GetChild(0).position + Vector3.up;
-
+        DiscordWebhooks.AddLineToTextFile("Log", TimeSpan.FromSeconds((int)Time.timeSinceLevelLoad).ToString() + " | " + "Player Respawned", false);
         m_CharacterController.enabled = true;
         m_InputEnabled -= 1;
         this.gameObject.transform.GetChild(0).gameObject.SetActive(true);

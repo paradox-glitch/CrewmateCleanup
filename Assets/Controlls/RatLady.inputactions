@@ -807,6 +807,60 @@
                     "isPartOfComposite": false
                 }
             ]
+        },
+        {
+            "name": "GameManager",
+            "id": "5f2eb521-255e-4fa2-b026-d4888d614239",
+            "actions": [
+                {
+                    "name": "ScreenShot",
+                    "type": "Button",
+                    "id": "903aa380-9536-4b23-8477-ebd1383841c8",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "6ae0efcc-f84c-4777-8ee5-63f081c74bc0",
+                    "path": "<Keyboard>/f5",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ScreenShot",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "LevelManager",
+            "id": "d60fb6d2-3dd4-4aee-a3c6-88cc61302fa8",
+            "actions": [
+                {
+                    "name": "Pause",
+                    "type": "Button",
+                    "id": "ee82141a-c746-4b4b-bb03-8543e847d96c",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "cd1f3cb8-1c94-4a8f-8e1d-dbb3fb2408b0",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Pause",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
         }
     ],
     "controlSchemes": [

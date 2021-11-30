@@ -11,7 +11,7 @@ using UnityEngine;
 
 public static class DiscordWebhooks
 {
-    private static string m_WebhhokURL = "https://discord.com/api/webhooks/910175802891599932/c5Abb5K1myQtMEH0sNHf6Kp5UiebmSbBSCtDDE0mxNevY2hLMIg-br28c46vRuIHcWMP";
+    private static string m_WebhhokURL = "https://discord.com/api/webhooks/914359222743994368/iVJhLy2_12RLrXVEQsC-129HdRfsSr9XlQZmOqwzacINoFae7tvrLB7jCy04oBzHM5mQ";
     private static bool m_Debugging = true;
 
     public static void SetDebugging(bool a_Debugging)
@@ -56,8 +56,7 @@ public static class DiscordWebhooks
             sw.Close();
         }
     }
-
-    public static void PostToDiscord(string a_FileName = "", string a_FileType = ".txt", string a_FileRename = "", string a_Payload = "")
+    public static void PostToDiscord(string a_FileName = "", string a_File2Name = "", string a_FileType = ".txt", string a_File2Type = ".txt", string a_FileRename = "", string a_File2Rename = "", string a_Payload = "")
     {
         var form = new MultipartFormDataContent();
 
@@ -81,6 +80,26 @@ public static class DiscordWebhooks
             form.Add(l_FileContent, "file", a_FileRename + a_FileType);
         }
 
+        if (a_File2Name != "")
+        {
+            string l_FilePath2 = GetFilePath(a_File2Name, a_File2Type);
+            if (!File.Exists(l_FilePath2))
+            {
+                if (m_Debugging)
+                    Debug.LogWarning("<color=#5865F2><size=12>Discord Webhooks | </size></color><color=#ED4245><b><size=12>File Does Not Exist: </size></b></color> \n<color=#FEE75C><i><size=10>File could not be found at path: " + l_FilePath2 + "</size></i></color>");
+                return;
+            }
+
+            //* These next few lines are adapted from https://github.com/Not-Cyrus/discord-file-webhook-upload/blob/main/webhook.cs;
+            var l_FileContent2 = new ByteArrayContent(File.ReadAllBytes(l_FilePath2));
+            l_FileContent2.Headers.ContentType = MediaTypeHeaderValue.Parse("multipart/form-data");
+
+            if (a_File2Rename == "")
+                a_File2Rename = a_File2Name;
+
+            form.Add(l_FileContent2, "file2", a_File2Rename + a_File2Type);
+        }
+
         if (a_Payload != "")
         {
             form.Add(new StringContent(a_Payload), "payload_json");
@@ -100,8 +119,130 @@ public static class DiscordWebhooks
         return;
     }
 
-    private static async Task GetForm(MultipartFormDataContent a_Form)
+    public static void PostToDiscordWithSucsess(out bool isSucsess,
+        string a_FileName = "", string a_FileRename = "", string a_FileType = ".txt",
+        string a_File2Name = "", string a_File2Rename = "", string a_File2Type = ".txt",
+        string a_File3Name = "", string a_File3Rename = "", string a_File3Type = ".txt",
+        string a_File4Name = "", string a_File4Rename = "", string a_File4Type = ".txt",
+        string a_Payload = "")
     {
+        var form = new MultipartFormDataContent();
+
+        if (a_FileName != "")
+        {
+            string l_FilePath = GetFilePath(a_FileName, a_FileType);
+            if (!File.Exists(l_FilePath))
+            {
+                if (m_Debugging)
+                    Debug.LogWarning("<color=#5865F2><size=12>Discord Webhooks | </size></color><color=#ED4245><b><size=12>File Does Not Exist: </size></b></color> \n<color=#FEE75C><i><size=10>File could not be found at path: " + l_FilePath + "</size></i></color>");
+                isSucsess = false;
+                return;
+            }
+
+            //* These next few lines are adapted from https://github.com/Not-Cyrus/discord-file-webhook-upload/blob/main/webhook.cs;
+            var l_FileContent = new ByteArrayContent(File.ReadAllBytes(l_FilePath));
+            l_FileContent.Headers.ContentType = MediaTypeHeaderValue.Parse("multipart/form-data");
+
+            if (a_FileRename == "")
+                a_FileRename = a_FileName;
+
+            form.Add(l_FileContent, "file", a_FileRename + a_FileType);
+        }
+
+        if (a_File2Name != "")
+        {
+            string l_FilePath2 = GetFilePath(a_File2Name, a_File2Type);
+            if (!File.Exists(l_FilePath2))
+            {
+                if (m_Debugging)
+                    Debug.LogWarning("<color=#5865F2><size=12>Discord Webhooks | </size></color><color=#ED4245><b><size=12>File Does Not Exist: </size></b></color> \n<color=#FEE75C><i><size=10>File could not be found at path: " + l_FilePath2 + "</size></i></color>");
+                isSucsess = false;
+                return;
+            }
+
+            //* These next few lines are adapted from https://github.com/Not-Cyrus/discord-file-webhook-upload/blob/main/webhook.cs;
+            var l_FileContent2 = new ByteArrayContent(File.ReadAllBytes(l_FilePath2));
+            l_FileContent2.Headers.ContentType = MediaTypeHeaderValue.Parse("multipart/form-data");
+
+            if (a_File2Rename == "")
+                a_File2Rename = a_File2Name;
+
+            form.Add(l_FileContent2, "file2", a_File2Rename + a_File2Type);
+        }
+
+        if (a_File3Name != "")
+        {
+            string l_FilePath3 = GetFilePath(a_File3Name, a_File3Type);
+            if (!File.Exists(l_FilePath3))
+            {
+                if (m_Debugging)
+                    Debug.LogWarning("<color=#5865F3><size=13>Discord Webhooks | </size></color><color=#ED4345><b><size=13>File Does Not Exist: </size></b></color> \n<color=#FEE75C><i><size=10>File could not be found at path: " + l_FilePath3 + "</size></i></color>");
+                isSucsess = false;
+                return;
+            }
+
+            //* These next few lines are adapted from https://github.com/Not-Cyrus/discord-file-webhook-upload/blob/main/webhook.cs;
+            var l_FileContent3 = new ByteArrayContent(File.ReadAllBytes(l_FilePath3));
+            l_FileContent3.Headers.ContentType = MediaTypeHeaderValue.Parse("multipart/form-data");
+
+            if (a_File3Rename == "")
+                a_File3Rename = a_File3Name;
+
+            form.Add(l_FileContent3, "file3", a_File3Rename + a_File3Type);
+        }
+
+        if (a_File4Name != "")
+        {
+            string l_FilePath4 = GetFilePath(a_File4Name, a_File4Type);
+            if (!File.Exists(l_FilePath4))
+            {
+                if (m_Debugging)
+                    Debug.LogWarning("<color=#5865F4><size=14>Discord Webhooks | </size></color><color=#ED4445><b><size=14>File Does Not Exist: </size></b></color> \n<color=#FEE75C><i><size=10>File could not be found at path: " + l_FilePath4 + "</size></i></color>");
+                isSucsess = false;
+                return;
+            }
+
+            //* These next few lines are adapted from https://github.com/Not-Cyrus/discord-file-webhook-upload/blob/main/webhook.cs;
+            var l_FileContent4 = new ByteArrayContent(File.ReadAllBytes(l_FilePath4));
+            l_FileContent4.Headers.ContentType = MediaTypeHeaderValue.Parse("multipart/form-data");
+
+            if (a_File4Rename == "")
+                a_File4Rename = a_File4Name;
+
+            form.Add(l_FileContent4, "file4", a_File4Rename + a_File4Type);
+        }
+
+        if (a_Payload != "")
+        {
+            form.Add(new StringContent(a_Payload), "payload_json");
+        }
+
+        if (a_FileName == "" && a_Payload == "")
+        {
+            if (m_Debugging)
+                Debug.LogWarning("<color=#5865F2><size=12>Discord Webhooks | </size></color><color=#ED4245><b><size=12>Args Error: </size></b></color> \n<color=#FEE75C><i><size=10>You must provide a File, Payload or Both.</size></i></color>");
+            isSucsess = false;
+            return;
+        }
+
+
+        var t = Task.Run(() => GetForm(form));
+        t.Wait();
+
+        Data returnData = t.Result;
+        isSucsess = returnData.Suuc;
+        return;
+    }
+
+    public class Data
+    {
+        public bool Suuc { get; set; }
+    }
+
+    private static async Task<Data> GetForm(MultipartFormDataContent a_Form)
+    {
+        var returnVar = new Data();
+
         using (HttpClient httpClient = new HttpClient())
         {
             HttpResponseMessage result = await httpClient.PostAsync(m_WebhhokURL, a_Form);
@@ -109,15 +250,17 @@ public static class DiscordWebhooks
             {
                 if (m_Debugging)
                     Debug.Log("<color=#5865F2><size=12>Discord Webhooks | </size></color><color=#57F287><b><size=12>Webhook Post Success: </size></b></color> \n<color=#FEE75C><i><size=10>" + await result.Content.ReadAsStringAsync() + "</size></i></color>");
-
+                returnVar.Suuc = true;
+                return returnVar;
             }
             else
             {
                 if (m_Debugging)
                     Debug.LogWarning("<color=#5865F2><size=12>Discord Webhooks | </size></color><color=#ED4245><b><size=12>Webhook Post Failer: </size></b></color> \n<color=#FEE75C><i><size=10>" + await result.Content.ReadAsStringAsync() + "</size></i></color>");
+                returnVar.Suuc = false;
+                return returnVar;
             }
         }
-        return;
     }
 
     public static void EasyPlainText(string a_Message)

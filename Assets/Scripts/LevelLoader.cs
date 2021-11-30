@@ -4,6 +4,7 @@ using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using UnityEngine.Analytics;
 using TMPro;
 
 public class LevelLoader : MonoBehaviour
@@ -18,10 +19,12 @@ public class LevelLoader : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        AnalyticsEvent.ScreenVisit("Loading Screen");
+
         m_GameManager = GameObject.FindGameObjectWithTag("Manager.Game").GetComponent<GameManager>();
         m_OldScene = m_GameManager.m_LastScene;
         m_NewScene = m_GameManager.m_NewScene;
-        m_Title.text = SceneManager.GetSceneByBuildIndex(m_NewScene).name;
+        m_Title.text = SceneManager.GetSceneByBuildIndex(m_NewScene).ToString();
         Debug.Log(SceneManager.GetSceneByBuildIndex(m_NewScene));
         StartCoroutine(SceneUnloadAndLoad());
     }
@@ -56,6 +59,8 @@ public class LevelLoader : MonoBehaviour
         SceneManager.SetActiveScene(SceneManager.GetActiveScene());
         m_TotalDefinedProgress += 0.1f;
 
+        DiscordWebhooks.AddLineToTextFile("Log", "---");
+        DiscordWebhooks.AddLineToTextFile("Log", "Unloaded: " + m_OldScene);
         m_Description.text = "Unloading Scene...";
         yield return new WaitForEndOfFrame();
         try { m_UnloadOperation = SceneManager.UnloadSceneAsync(m_OldScene); }
@@ -69,6 +74,8 @@ public class LevelLoader : MonoBehaviour
         m_Description.text = "Loading Scene...";
         yield return new WaitForEndOfFrame();
         m_PreloadOperation = SceneManager.LoadSceneAsync(m_NewScene, LoadSceneMode.Single);
+        DiscordWebhooks.AddLineToTextFile("Log", "Loaded: " + m_NewScene);
+        DiscordWebhooks.AddLineToTextFile("Log", "---");
         m_PreloadOperation.allowSceneActivation = false;
     }
 }

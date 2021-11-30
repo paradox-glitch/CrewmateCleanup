@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Analytics;
 using System;
 
 public class QuitMenu : MonoBehaviour
@@ -9,6 +10,7 @@ public class QuitMenu : MonoBehaviour
 
     void TriggerInteraction()
     {
+        AnalyticsEvent.ScreenVisit("Exit Game");
         m_PanelQuitGameobject.SetActive(true);
         FindPlayer();
         m_PlayerGameobject.SendMessage("AddPauseReason");

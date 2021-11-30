@@ -112,13 +112,28 @@ public class ParticleDecalPool : MonoBehaviour
         return l_DecalsLeft;
     }
 
+    public string DecalLeftPos()
+    {
+        string l_Positions = "";
+
+        for (int i = 0; i < particleData.Length; i++)
+        {
+            if (particleData[i].clean == false)
+            {
+                l_Positions = l_Positions + particleData[i].position.ToString() + "; ";
+            }
+        }
+
+        return l_Positions;
+    }
+
     void TryClean(Vector3 a_CleanPos)
     {
         for (int i = 0; i < particleData.Length; i++)
         {
             float l_Distance = Vector3.Distance(a_CleanPos, particleData[i].position);
 
-            if (l_Distance < 1.5)
+            if (l_Distance < 1.2f)
             {
                 particleData[i].clean = true;
             }

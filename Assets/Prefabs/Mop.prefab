@@ -83,7 +83,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 631af9eb01cccf04189a64f4aed5d23b, type: 3}
       propertyPath: m_Name
-      value: SM.Mop Variant
+      value: Mop
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 631af9eb01cccf04189a64f4aed5d23b, type: 3}
       propertyPath: m_Layer

@@ -12,9 +12,15 @@ EditorBuildSettings:
     path: Assets/Scenes/LoadingScene.unity
     guid: 479929de14ccb1f42bbc647bf4207791
   - enabled: 1
+    path: Assets/Scenes/Tutorial000.unity
+    guid: ec1002f8082e0c74b9576563e31c1152
+  - enabled: 1
     path: Assets/Scenes/TheShip101.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
-  - enabled: 0
-    path: 
-    guid: 00000000000000000000000000000000
+  - enabled: 1
+    path: Assets/Scenes/TheShip102.unity
+    guid: 2ef00fb1a575b2f4ab37082ff76f6f6d
+  - enabled: 1
+    path: Assets/Scenes/TheShip103.unity
+    guid: 18f25015fb88c6346b98147d809bea24
   m_configObjects: {}
