@@ -167,6 +167,19 @@ public class LevelManager : MonoBehaviour
             m_DiscordController._topMessage = "Playing Level " + m_ThisLevelNumber;
             m_DiscordController._bottomMessage = "Score " + score;
 
+
+            int l_HighScore = 0;
+
+            if (PlayerPrefs.HasKey(SceneManager.GetActiveScene().name + "HighScore"))
+                l_HighScore = PlayerPrefs.GetInt(SceneManager.GetActiveScene().name + "HighScore");
+
+            if (score > l_HighScore)
+            {
+                scoreMessage = "New High Score: " + scoreMessage;
+                PlayerPrefs.SetInt(SceneManager.GetActiveScene().name + "HighScore", score);
+            }
+
+
             PlayerPrefs.SetInt("CurrentLevel", m_ThisLevelNumber + 1);
             PlayerPrefs.Save();
 

@@ -21,8 +21,6 @@ public class BloodSpawner : MonoBehaviour
 
     bool test = false;
 
-    float tt = 0;
-
     // Start is called before the first frame update
     void Start()
     {
@@ -59,7 +57,6 @@ public class BloodSpawner : MonoBehaviour
                 {
                     m_SplatDecalPool.GetComponent<ParticleDecalPool>().SetParticalDataDirect(l_Hit.point + (Random.Range(0.01f, 0.05f) * Vector3.up), -transform.up);
                     test = false;
-                    tt = -10000;
                 }
 
 
