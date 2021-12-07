@@ -15,7 +15,7 @@ public class LevelMenus : MonoBehaviour
     {
         if(!PlayerPrefs.HasKey("CurrentLevel"))
         {
-            PlayerPrefs.SetInt("CurrentLevel", 1);
+            PlayerPrefs.SetInt("CurrentLevel", 0);
             PlayerPrefs.Save();
         }
 

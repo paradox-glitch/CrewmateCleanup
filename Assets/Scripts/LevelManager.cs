@@ -63,11 +63,24 @@ public class LevelManager : MonoBehaviour
 
     bool once = false, m_Paused;
 
+    private DiscordController m_DiscordController;
+
 
     // Start is called before the first frame update
     void Start()
     {
-        AnalyticsEvent.LevelStart("Level" + m_ThisLevelNumber);
+        GameObject[] _discordManagers = GameObject.FindGameObjectsWithTag("DiscordManager");
+        if(_discordManagers.Length != 0)
+        {
+            m_DiscordController = _discordManagers[0].GetComponent<DiscordController>();
+        }
+
+        m_DiscordController.ResetTime();
+
+
+
+
+        AnalyticsEvent.LevelStart(m_ThisLevelNumber);
 
 
         m_DropDecalPool = GameObject.FindGameObjectWithTag("DropDecalPool");
@@ -143,12 +156,16 @@ public class LevelManager : MonoBehaviour
             DiscordWebhooks.AddLineToTextFile("Log", TimeSpan.FromSeconds((int)Time.timeSinceLevelLoad).ToString() + " | " + "Player Had Dirt% Left: " + persentofdirt, false);
 
             AnalyticsEvent.ScreenVisit("LevelPass");
-            AnalyticsEvent.LevelComplete("Level" + m_ThisLevelNumber);
+            AnalyticsEvent.LevelComplete(m_ThisLevelNumber);
 
             m_PassUI.SetActive(true);
             int score = FinalPointsMath();
             string scoreMessage = score.ToString();
             DiscordWebhooks.AddLineToTextFile("Log", TimeSpan.FromSeconds((int)Time.timeSinceLevelLoad).ToString() + " | " + "Player Had Score: " + score, false);
+
+
+            m_DiscordController._topMessage = "Playing Level " + m_ThisLevelNumber;
+            m_DiscordController._bottomMessage = "Score " + score;
 
             PlayerPrefs.SetInt("CurrentLevel", m_ThisLevelNumber + 1);
             PlayerPrefs.Save();
@@ -181,6 +198,9 @@ public class LevelManager : MonoBehaviour
             l_Time = l_Time.Replace("00:", "");
             l_Time = l_Time.Replace("0000", "");
             text.text = "Time: " + l_Time;
+
+            m_DiscordController._topMessage = "Playing Level " + m_ThisLevelNumber;
+            m_DiscordController._bottomMessage = "Dirt Left " + persentofdirt + "%";
         }
 
         if (m_TimeLimit <= 0 && !once)
@@ -202,7 +222,7 @@ public class LevelManager : MonoBehaviour
 
         Time.timeScale = 0f;
 
-        AnalyticsEvent.LevelFail("Level" + m_ThisLevelNumber);
+        AnalyticsEvent.LevelFail(m_ThisLevelNumber);
         AnalyticsEvent.ScreenVisit("LevelFail");
         m_FailUI.SetActive(true);
         reasontext.text = a_Reason;
@@ -222,7 +242,7 @@ public class LevelManager : MonoBehaviour
     {
         Time.timeScale = 1f;
         DiscordWebhooks.AddLineToTextFile("Log", "Player Quit to Menu");
-        AnalyticsEvent.LevelQuit("Level" + m_ThisLevelNumber);
+        AnalyticsEvent.LevelQuit(m_ThisLevelNumber);
         GameObject.FindGameObjectWithTag("Manager.Game").GetComponent<GameManager>().LoadNewScene(SceneManager.GetActiveScene().buildIndex, 0);
     }
 

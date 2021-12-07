@@ -43,8 +43,49 @@ public class MainMenu : MonoBehaviour
         else
         {
             DiscordWebhooks.AddLineToTextFile("Log", "Previous User LogOn Detected, Reirected user past data Consent and sign in");
+
+            //* DATA CLEAN ON NEW VERSION
+
+            if (PlayerPrefs.HasKey("LastPlayedVersion"))
+            {
+                if(PlayerPrefs.GetString("LastPlayedVersion") != Application.version)
+                {
+                    //Clean Data
+                    Debug.Log("Clean Data - Wrong Version");
+
+
+
+                    PlayerPrefs.DeleteKey("CurrentLevel");
+                }
+                else
+                {
+                    Debug.Log("No Clean Data - Matched Version");
+
+                }
+            }
+            else
+            {
+                //* Fix for V0.0.1 
+
+                //* Clean Data
+                Debug.Log("Clean Data - No Version");
+
+                PlayerPrefs.DeleteKey("CurrentLevel");
+
+            }
+
+            PlayerPrefs.SetString("LastPlayedVersion", (string)Application.version);
+            PlayerPrefs.Save();
             MenuSetup();
+
+
+
+
+
         }
+
+
+        Instantiate(_discordManager);
     }
 
     public void DidScroll()
