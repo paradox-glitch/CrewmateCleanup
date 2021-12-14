@@ -11,7 +11,8 @@ using UnityEngine;
 
 public static class DiscordWebhooks
 {
-    private static string m_WebhhokURL = "https://discord.com/api/webhooks/914359222743994368/iVJhLy2_12RLrXVEQsC-129HdRfsSr9XlQZmOqwzacINoFae7tvrLB7jCy04oBzHM5mQ";
+    private static string m_WebhhokURL = "https://discord.com/api/webhooks/920307303251603477/BenXg49FDmPOEi_mkz9vl2Ntm5rodJGTuWBFroJa_gx_R1ziDcuHIMLMCxB6EeTnQ8-5";
+
     private static bool m_Debugging = true;
 
     public static void SetDebugging(bool a_Debugging)

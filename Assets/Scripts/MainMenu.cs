@@ -18,7 +18,7 @@ public class MainMenu : MonoBehaviour
 
     [Header("Login")]
     [SerializeField] private TMP_InputField _usernameInput;
-    [SerializeField] private GameObject _loginPanel, _discordManager;
+    [SerializeField] private GameObject _loginPanel, _discordManager, m_PatchNotesPannel;
     [SerializeField] private Button _discordButton, _retryButton, _guestButton;
     [SerializeField] private TextMeshProUGUI _discordErrorText, _guestErrorText;
 
@@ -55,7 +55,7 @@ public class MainMenu : MonoBehaviour
 
 
 
-                    PlayerPrefs.DeleteKey("CurrentLevel");
+                    CleanDataAndShowPatchNotes();
                 }
                 else
                 {
@@ -65,17 +65,23 @@ public class MainMenu : MonoBehaviour
             }
             else
             {
-                //* Fix for V0.0.1 
+                if (AnalyticsSessionInfo.sessionFirstRun)
+                {
+                    Debug.Log("No Clean Data - First Version");
+                }
+                else
+                {
 
-                //* Clean Data
-                Debug.Log("Clean Data - No Version");
+                    //* Fix for V0.0.1 
 
-                PlayerPrefs.DeleteKey("CurrentLevel");
+                    //* Clean Data
+                    Debug.Log("Clean Data - No Version");
+
+                    CleanDataAndShowPatchNotes();
+                }
 
             }
 
-            PlayerPrefs.SetString("LastPlayedVersion", (string)Application.version);
-            PlayerPrefs.Save();
             MenuSetup();
 
 
@@ -83,9 +89,22 @@ public class MainMenu : MonoBehaviour
 
 
         }
-
+        PlayerPrefs.SetString("LastPlayedVersion", (string)Application.version);
+        PlayerPrefs.Save();
 
         Instantiate(_discordManager);
+    }
+
+    void CleanDataAndShowPatchNotes()
+    {
+        PlayerPrefs.DeleteKey("CurrentLevel");
+
+        m_PatchNotesPannel.SetActive(true);
+    }
+
+    public void ButtonCloseNotes()
+    {
+        m_PatchNotesPannel.SetActive(false);
     }
 
     public void DidScroll()
