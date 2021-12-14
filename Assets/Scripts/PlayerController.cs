@@ -47,7 +47,7 @@ public class PlayerController : MonoBehaviour
         m_IsGrounded = false,
         m_ToJump = false;
 
-    private int
+    public int
         m_PlayerHealth = 3,
         m_SmallDirtCleaned = 0,
         m_InputEnabled = 0,

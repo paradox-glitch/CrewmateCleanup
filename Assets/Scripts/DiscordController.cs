@@ -40,7 +40,7 @@ public class DiscordController : MonoBehaviour
         }
         catch (Exception e)
         {
-            UnityEngine.Debug.LogError("Discord | Failed to initiate application client \n" + e.Message);
+            UnityEngine.Debug.LogWarning("Discord | Failed to initiate application client \n" + e.Message);
             Destroy(this.gameObject);
             return;
         }

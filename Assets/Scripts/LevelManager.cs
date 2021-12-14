@@ -59,7 +59,7 @@ public class LevelManager : MonoBehaviour
     [SerializeField]
     private LayerMask DisposalAreaLayer;
 
-    public TextMeshProUGUI scoretext, reasontext;
+    public TextMeshProUGUI scoretext, reasontext, m_HighScoreText;
 
     bool once = false, m_Paused;
 
@@ -75,6 +75,7 @@ public class LevelManager : MonoBehaviour
             m_DiscordController = _discordManagers[0].GetComponent<DiscordController>();
         }
 
+        if(m_DiscordController != null)
         m_DiscordController.ResetTime();
 
 
@@ -163,15 +164,19 @@ public class LevelManager : MonoBehaviour
             string scoreMessage = score.ToString();
             DiscordWebhooks.AddLineToTextFile("Log", TimeSpan.FromSeconds((int)Time.timeSinceLevelLoad).ToString() + " | " + "Player Had Score: " + score, false);
 
-
-            m_DiscordController._topMessage = "Playing Level " + m_ThisLevelNumber;
-            m_DiscordController._bottomMessage = "Score " + score;
+            if (m_DiscordController != null)
+                m_DiscordController._topMessage = "Playing Level " + m_ThisLevelNumber;
+            if (m_DiscordController != null)
+                m_DiscordController._bottomMessage = "Score " + score;
 
 
             int l_HighScore = 0;
 
             if (PlayerPrefs.HasKey(SceneManager.GetActiveScene().name + "HighScore"))
+            {
                 l_HighScore = PlayerPrefs.GetInt(SceneManager.GetActiveScene().name + "HighScore");
+                m_HighScoreText.text = "Highscore to beat: " + l_HighScore;
+            }
 
             if (score > l_HighScore)
             {
@@ -212,8 +217,10 @@ public class LevelManager : MonoBehaviour
             l_Time = l_Time.Replace("0000", "");
             text.text = "Time: " + l_Time;
 
-            m_DiscordController._topMessage = "Playing Level " + m_ThisLevelNumber;
-            m_DiscordController._bottomMessage = "Dirt Left " + persentofdirt + "%";
+            if (m_DiscordController != null)
+                m_DiscordController._topMessage = "Playing Level " + m_ThisLevelNumber;
+            if (m_DiscordController != null)
+                m_DiscordController._bottomMessage = "Dirt Left " + persentofdirt + "%";
         }
 
         if (m_TimeLimit <= 0 && !once)
@@ -304,7 +311,7 @@ public class LevelManager : MonoBehaviour
 
     void SetPlayerHealth(int a_NewHealth)
     {
-        health.text = "Health: " + a_NewHealth;
+        health.text = "Health: " + a_NewHealth.ToString();
 
         if(a_NewHealth <= 0)
         {
