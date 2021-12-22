@@ -18,6 +18,10 @@ public class TutorialManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        PlayerPrefs.SetInt("CurrentLevel", 1);
+        PlayerPrefs.Save();
+
+
         DiscordWebhooks.AddLineToTextFile("Log", "----------------", false);
         DiscordWebhooks.AddLineToTextFile("Log", "TUTORIAL LOADED");
         DiscordWebhooks.AddLineToTextFile("Log", "----------------", false);

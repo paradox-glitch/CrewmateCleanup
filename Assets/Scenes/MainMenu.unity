@@ -180,7 +180,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 00
+  m_text: Tutorial
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -20779,8 +20779,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -6, y: 310}
-  m_SizeDelta: {x: 100, y: 100}
+  m_AnchoredPosition: {x: -6, y: 207}
+  m_SizeDelta: {x: 600, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1118055218
 GameObject:
@@ -31429,7 +31429,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "[~Change] Dirt near other collected dirt will now also be collected.\n[+Added]
+  m_text: "[~Change] Dirt near other collected dirt will now also be collected.\n[~Change]
+    Players can no longer play level 1 without loading the tutorial first. \n[+Added]
     High Score, the game now tracks your best score.\n[#Fixed] Analyitics concent
     form showing multiple times during first session.\n[#Fixed] Scene loaded not
     showing target scene name.\n[#Fixed] Some analyictal data not arraving correcl

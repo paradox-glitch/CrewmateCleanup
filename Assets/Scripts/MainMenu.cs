@@ -27,6 +27,7 @@ public class MainMenu : MonoBehaviour
 
     public GameObject[] questions = new GameObject[8];
     public GameObject ddd;
+    bool m_HasLogin = false;
 
     private void Awake()
     {
@@ -175,10 +176,19 @@ public class MainMenu : MonoBehaviour
         Instantiate(m_PlayerPrefab, transform.GetChild(0).transform.position + Vector3.up, transform.GetChild(0).transform.rotation);
     }
 
+    IEnumerator WaitForLogin()
+    {
+        Debug.Log("waiting");
+        yield return new WaitUntil(() => m_HasLogin == true);
+        Debug.Log("done");
+        StartCoroutine(test());
+    }
+
     public void LoginSetup()
     {
         AnalyticsEvent.ScreenVisit("Login");
 
+        m_HasLogin = false;
         _consentPanel.SetActive(false);
         _mainMenuPanel.SetActive(false);
         _loginPanel.SetActive(true);
@@ -188,13 +198,14 @@ public class MainMenu : MonoBehaviour
         _discordButton.interactable = _discordRunning;
         _retryButton.interactable = !_discordRunning;
         _discordErrorText.gameObject.SetActive(!_discordRunning);
+        StartCoroutine(WaitForLogin());
     }
 
     void DiscordLoginSuccsess()
     {
         DiscordWebhooks.AddLineToTextFile("Log", "User Login With Discord");
         AnalyticsEvent.UserSignup(new AuthorizationNetwork());
-        StartCoroutine(test());
+        m_HasLogin = true;
     }
 
     IEnumerator test()
@@ -222,7 +233,7 @@ public class MainMenu : MonoBehaviour
 
     public void DiscordLogin()
     {
-        Instantiate(_discordManager);
+        GameObject.FindGameObjectWithTag("DiscordManager").SendMessage("Login");
     }
 
     public void RetryDiscord()
@@ -242,7 +253,7 @@ public class MainMenu : MonoBehaviour
         DiscordWebhooks.AddLineToTextFile("Log", "User Playing as Guest");
 
 
-        StartCoroutine(test());
+        m_HasLogin = true;
     }
 
     public void ButtonLogOut()

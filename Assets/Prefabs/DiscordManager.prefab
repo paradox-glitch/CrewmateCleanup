@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3470481734194740150}
   m_Layer: 0
   m_Name: DiscordManager
-  m_TagString: Untagged
+  m_TagString: DiscordManager
   m_Icon: {fileID: 2800000, guid: 0bb8cfd6831f09b43b5bebb087edc044, type: 3}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -43,7 +43,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4db022e3c37c5cc4c83acf3557faad23, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _topMessage: I am a Top
-  _bottomMessage: I am a bottom
+  _topMessage: On The Main Menu
+  _bottomMessage: Exploring the home ship
   _timeStamp: 0
   _applicationID: 906221483272073287

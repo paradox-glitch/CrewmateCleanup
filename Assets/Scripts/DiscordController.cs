@@ -15,7 +15,7 @@ public class DiscordController : MonoBehaviour
     public Discord.Discord discord;
     public Discord.ActivityManager discordActivityManager;
 
-    public string _topMessage = "I am a Top", _bottomMessage = "I am a bottom";
+    public string _topMessage = "On The Main Menu", _bottomMessage = "Exploring the home ship";
     public int _timeStamp = 0;
     bool _userGrab = false;
     public long _applicationID = 906221483272073287;
@@ -29,6 +29,37 @@ public class DiscordController : MonoBehaviour
             Destroy(this.gameObject);
         DontDestroyOnLoad(this.gameObject);
     }
+
+    void Login()
+    {
+        StartCoroutine(LoginCor());
+    }
+
+    IEnumerator LoginCor()
+    {
+        yield return new WaitUntil(() => _userGrab == true);
+
+        if (!PlayerPrefs.HasKey("DiscordUserID"))
+        {
+            _userGrab = false;
+            TryUsename();
+
+            Debug.Log("testing");
+            StartCoroutine(LoginCor());
+        }
+        else
+        {
+
+
+
+            PlayerPrefs.SetString("UserID", PlayerPrefs.GetString("DiscordUserID"));
+            PlayerPrefs.SetString("Username", PlayerPrefs.GetString("DiscordUsername"));
+            PlayerPrefs.Save();
+            yield return new WaitForEndOfFrame();
+            GameObject.FindGameObjectWithTag("MainMenuManager").SendMessage("DiscordLoginSuccsess");
+        }
+    }
+
 
     void Start()
     {
@@ -63,13 +94,26 @@ public class DiscordController : MonoBehaviour
       {
           var currentUser = userManager.GetCurrentUser();
 
-          PlayerPrefs.SetString("UserID", currentUser.Id.ToString());
-          PlayerPrefs.SetString("Username", currentUser.Username);
+          PlayerPrefs.SetString("DiscordUserID", currentUser.Id.ToString());
+          PlayerPrefs.SetString("DiscordUsername", currentUser.Username);
           PlayerPrefs.Save();
           _userGrab = true;
       };
 
         StartCoroutine(WaitForUsername());
+    }
+
+
+    void TryUsename()
+    {
+        var userManager = discord.GetUserManager();
+
+            var currentUser = userManager.GetCurrentUser();
+
+            PlayerPrefs.SetString("DiscordUserID", currentUser.Id.ToString());
+            PlayerPrefs.SetString("DiscordUsername", currentUser.Username);
+            PlayerPrefs.Save();
+            _userGrab = true;
     }
 
     void Update()
@@ -129,7 +173,6 @@ public class DiscordController : MonoBehaviour
 
         if (_userGrab)
         {
-            GameObject.FindGameObjectWithTag("MainMenuManager").SendMessage("DiscordLoginSuccsess");
             StartCoroutine(UpdateTimer());
         }
         else
