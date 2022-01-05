@@ -7,8 +7,20 @@ using TMPro;
 
 using _SDiag = System.Diagnostics;
 
+
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using TMPro;
+using UnityEngine.UI;
+using UnityEngine.Networking;
+using System.IO;
+using System;
+
 public class MainMenu : MonoBehaviour
 {
+
+    private const string scoreURL = "https://crewmatecleanup.pdox.uk/highscore.php";
 
     [Header("Consent")]
     [SerializeField] private GameObject _consentPanel;
@@ -28,6 +40,8 @@ public class MainMenu : MonoBehaviour
     public GameObject[] questions = new GameObject[8];
     public GameObject ddd;
     bool m_HasLogin = false;
+
+    DiscordController m_DiscordController;
 
     private void Awake()
     {
@@ -54,9 +68,20 @@ public class MainMenu : MonoBehaviour
                     //Clean Data
                     Debug.Log("Clean Data - Wrong Version");
 
+                    if (PlayerPrefs.GetString("LastPlayedVersion") != Application.version)
+                    {
+                        if (PlayerPrefs.HasKey("TheShip101HighScore"))
+                            ScoreboardConnection.PostScoreWithSucsess("0101", PlayerPrefs.GetInt("TheShip101HighScore"), out _);
+                        if (PlayerPrefs.HasKey("TheShip102HighScore"))
+                            ScoreboardConnection.PostScoreWithSucsess("0102", PlayerPrefs.GetInt("TheShip102HighScore"), out _);
+                        if (PlayerPrefs.HasKey("TheShip103HighScore"))
+                            ScoreboardConnection.PostScoreWithSucsess("0103", PlayerPrefs.GetInt("TheShip103HighScore"), out _);
+                    }
 
 
-                    CleanDataAndShowPatchNotes();
+
+
+                        CleanDataAndShowPatchNotes();
                 }
                 else
                 {
@@ -226,7 +251,9 @@ public class MainMenu : MonoBehaviour
 
         Analytics.CustomEvent("userLogin");
 
-        MenuSetup();
+        GameObject.FindGameObjectWithTag("Manager.Game").GetComponent<GameManager>().LoadNewScene(
+    0,
+    2);
 
         yield return null;
     }
@@ -309,6 +336,23 @@ public class MainMenu : MonoBehaviour
 
     void Start()
     {
+        ScoreboardConnection.GetScoreWithSucsess("0101", out _, Application.persistentDataPath);
+        ScoreboardConnection.GetScoreWithSucsess("0102", out _, Application.persistentDataPath);
+        ScoreboardConnection.GetScoreWithSucsess("0103", out _, Application.persistentDataPath);
+
+
         _usernameInput.onValueChanged.AddListener(delegate { UsernameCheck(); });
+
+
+        GameObject[] _discordManagers = GameObject.FindGameObjectsWithTag("DiscordManager");
+        if (_discordManagers.Length != 0)
+        {
+            m_DiscordController = _discordManagers[0].GetComponent<DiscordController>();
+        }
+
+        if (m_DiscordController != null)
+            m_DiscordController._topMessage = "On The Main Menu";
+        if (m_DiscordController != null)
+            m_DiscordController._bottomMessage = "Exploring the home ship";
     }
 }

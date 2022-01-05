@@ -6,6 +6,7 @@ using TMPro;
 using UnityEngine.UI;
 using UnityEngine.Analytics;
 using UnityEngine.SceneManagement;
+using System.IO;
 
 public class LevelManager : MonoBehaviour
 {
@@ -46,6 +47,8 @@ public class LevelManager : MonoBehaviour
         m_PointsLargeJunk = 10,
         m_PointsChildren = 5,
         m_PointsRats = 12;
+
+    public GameObject bord;
 
     public TextMeshProUGUI text, percenttext, health;
 
@@ -182,9 +185,59 @@ public class LevelManager : MonoBehaviour
             {
                 scoreMessage = "New High Score: " + scoreMessage;
                 PlayerPrefs.SetInt(SceneManager.GetActiveScene().name + "HighScore", score);
+
+                ScoreboardConnection.PostScoreWithSucsess("0" + (100 + m_ThisLevelNumber).ToString(), score, out _);
+            }
+
+            ScoreboardConnection.GetScoreWithSucsess("0" + (100 + m_ThisLevelNumber).ToString(),out _, Application.persistentDataPath);
+
+            int position = 0;
+
+            foreach (string line in File.ReadLines(Application.persistentDataPath + "/ScoreboardData" + "0" + (100 + m_ThisLevelNumber).ToString() + ".csv"))
+            {
+                try
+                {
+                    Transform l_PlaceHolder = bord.transform.GetChild(position);
+                    Transform l_PlaceNumber = l_PlaceHolder.GetChild(0);
+                    Transform l_PlaceName = l_PlaceHolder.GetChild(1);
+                    Transform l_PlaceScore = l_PlaceHolder.GetChild(2);
+                    TextMeshProUGUI l_TMPNumber = l_PlaceNumber.GetComponent<TextMeshProUGUI>();
+                    TextMeshProUGUI l_TMPName = l_PlaceName.GetComponent<TextMeshProUGUI>();
+                    TextMeshProUGUI l_TMPScore = l_PlaceScore.GetComponent<TextMeshProUGUI>();
+
+                    if((line.Split(','))[0] != "")
+                    l_TMPName.text = (line.Split(','))[0];
+                    l_TMPScore.text = (line.Split(','))[2];
+
+                    if ((line.Split(','))[1] == PlayerPrefs.GetString("UserID"))
+                    {
+                        l_TMPNumber.fontStyle = FontStyles.Bold;
+                        l_TMPName.fontStyle = FontStyles.Bold;
+                        l_TMPScore.fontStyle = FontStyles.Bold;
+
+                        l_TMPName.text += " (You)";
+
+                        if (position >= 3)
+                        {
+                            l_TMPNumber.color = m_PlayerGameobject.transform.GetChild(0).GetComponent<Renderer>().material.color;
+                            l_TMPName.color = m_PlayerGameobject.transform.GetChild(0).GetComponent<Renderer>().material.color;
+                            l_TMPScore.color = m_PlayerGameobject.transform.GetChild(0).GetComponent<Renderer>().material.color;
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+                    break;
+                }
+
+                position++;
+
+                if (position >= 9)
+                    break;
             }
 
 
+            if(PlayerPrefs.GetInt("CurrentLevel") < m_ThisLevelNumber + 1)
             PlayerPrefs.SetInt("CurrentLevel", m_ThisLevelNumber + 1);
             PlayerPrefs.Save();
 
@@ -349,8 +402,12 @@ public class LevelManager : MonoBehaviour
         }
 
 
-        percenttext.text = ((int)persentofdirt).ToString() + "%";
-        perslide.value = persentofdirt / 100;
+        percenttext.text = "Cleanness: " + (100 -((int)persentofdirt)).ToString() + "%";
+        perslide.value = 1- (persentofdirt / 100);
+        if(persentofdirt <= 10)
+        {
+            perslide.transform.GetChild(1).GetChild(0).gameObject.GetComponent<Image>().color = Color.green;
+        }
     }
 
     int LargeJunkCheck()

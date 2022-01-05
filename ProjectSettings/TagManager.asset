@@ -21,6 +21,7 @@ TagManager:
   - Tool.CattleProd
   - Tool.MegaPhone
   - Manager.Game
+  - Manager.Music
   layers:
   - Default
   - TransparentFX

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Audio;
 using System.Linq;
 using System;
 
@@ -43,6 +44,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private bool m_LocalizeMovement = false;
 
+    public GameObject m_WaterSplaterPrefab;
+
     private bool
         m_IsGrounded = false,
         m_ToJump = false;
@@ -69,6 +72,9 @@ public class PlayerController : MonoBehaviour
     private ConfigurableJoint m_ItemJoint;
 
     enum m_HandItems { Hand, Mop, MegaPhone, Brush, CattleProd, Gloves }
+
+    public AudioClip[] m_BrushSFX, m_BagSFX, m_KeyPadSFX, m_MopSFX;
+    public AudioMixerGroup SFXgroup;
 
     private void Start()
     {
@@ -169,10 +175,22 @@ public class PlayerController : MonoBehaviour
 
         if(m_SmallDirtCleaned >= m_SmallDirtTarget)
         {
+            PlaySFXClip(m_BagSFX[(int)UnityEngine.Random.Range(0, m_BagSFX.Length - 1)]);
             Instantiate(m_Bag, m_MouseRayHit.point + Vector3.up, transform.rotation);
-            m_SmallDirtTarget = UnityEngine.Random.Range(16, 20);
+            m_SmallDirtTarget = UnityEngine.Random.Range(32, 40);
             m_SmallDirtCleaned = 0;
         }
+    }
+
+    void PlaySFXClip(AudioClip a_SFXClip)
+    {
+        GameObject l_TempGO = new GameObject("AudioSFX");
+        l_TempGO.AddComponent<AudioSource>();
+        AudioSource l_AudioSource = l_TempGO.GetComponent<AudioSource>();
+        l_AudioSource.outputAudioMixerGroup = SFXgroup;
+        l_AudioSource.clip = a_SFXClip;
+        l_AudioSource.Play();
+        Destroy(l_TempGO, a_SFXClip.length);
     }
 
     //* Called by UnityEngine.InputSystem when the LMB is pressed
@@ -185,10 +203,13 @@ public class PlayerController : MonoBehaviour
 
         if(l_InteractionObject != null)
         {
+            PlaySFXClip(m_KeyPadSFX[(int)UnityEngine.Random.Range(0, m_KeyPadSFX.Length - 1)]);
             l_InteractionObject.SendMessage("TriggerInteraction");
             return;
         }
 
+
+        m_HandPosition.GetComponent<Animation>().Play();
 
         switch (m_CurrentHandItem)
         {
@@ -196,9 +217,11 @@ public class PlayerController : MonoBehaviour
                 Pickup();
                 break;
             case m_HandItems.Mop:
+                PlaySFXClip(m_MopSFX[(int)UnityEngine.Random.Range(0, m_MopSFX.Length - 1)]);
                 DoMop();
                 break;
             case m_HandItems.Brush:
+                PlaySFXClip(m_BrushSFX[(int)UnityEngine.Random.Range(0, m_BrushSFX.Length - 1)]);
                 try { InteractionObject(m_DirtLayerMask, "Dirt.SmallJunk").SendMessage("CleanUp", this.gameObject); }
                 catch(Exception e) { Debug.Log("NoItemFound"); }
                 break;
@@ -329,7 +352,13 @@ public class PlayerController : MonoBehaviour
     GameObject InteractionObject(LayerMask a_Layer, string a_tag = null)
     {
         Collider[] l_ItemsNearHand = Physics.OverlapSphere(m_MouseRayHit.point, m_HandInteractRadius, a_Layer);
-        Collider[] l_ItemsNearBody = Physics.OverlapSphere(transform.position, m_PlayerReachRadius, a_Layer);
+        //Collider[] l_ItemsNearBody = Physics.OverlapSphere(transform.position, m_PlayerReachRadius, a_Layer);
+
+        Vector3 l_HandUpperPosition = new Vector3(m_MouseRayHit.point.x, m_MouseRayHit.point.y + 2, m_MouseRayHit.point.z);
+        Vector3 l_BodyUpperPosition = new Vector3(transform.position.x, transform.position.y + 2, transform.position.z);
+
+        //Collider[] l_ItemsNearHand = Physics.OverlapCapsule(m_MouseRayHit.point, l_HandUpperPosition, m_HandInteractRadius, a_Layer);
+        Collider[] l_ItemsNearBody = Physics.OverlapCapsule(transform.position, l_BodyUpperPosition, m_PlayerReachRadius, a_Layer);
 
         Collider[] l_ItemsNearBoth = CheckBoth(l_ItemsNearBody, l_ItemsNearHand);
 
@@ -343,6 +372,8 @@ public class PlayerController : MonoBehaviour
     void DoMop()
     {
         float l_Distance = Vector3.Distance(transform.position, m_MouseRayHit.point);
+
+        Instantiate(m_WaterSplaterPrefab, new Vector3(m_HandPosition.transform.position.x, transform.position.y + 0.1f, m_HandPosition.transform.position.z), m_HandPosition.transform.rotation);
 
         if (l_Distance > 2)
             return;

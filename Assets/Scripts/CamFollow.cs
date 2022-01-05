@@ -19,7 +19,7 @@ public class CamFollow : MonoBehaviour
 
     void Start()
     {
-        m_CameraToPlayerOffset = Vector3.zero + this.transform.position;
+        m_CameraToPlayerOffset = new Vector3(8, 12, -8);
         FindPlayer();
         
     }

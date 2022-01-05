@@ -35,7 +35,7 @@ public class GameManager : MonoBehaviour
         DiscordWebhooks.AddLineToTextFile("Log", "Game Started");
         DiscordWebhooks.AddLineToTextFile("Log", "App version is: " + Application.version);
 
-        DiscordWebhooks.SetWebhookURL("https://discord.com/api/webhooks/920307103837589545/sx58dkrxjiS7psqoAl2qe6IVt5E2L1zmFnLtg6w9fV442LVyD1AsUg53FnwEwWgxcVpN");
+        DiscordWebhooks.SetWebhookURL("https://discord.com/api/webhooks/928092476353429585/MEdNI7J1S_0730wDwCWQv_0V68Kef2JGfXkl52w96noyrwCNu-CmVG0DRp6ZWSKULuUx");
 #if UNITY_EDITOR
         DiscordWebhooks.SetWebhookURL("https://discord.com/api/webhooks/920305880254251060/cQlUjgKrfENO0BXyZHsyU6u4fWw4eOVZYsckPJruh9fz0M6gSeHv2RuJpKmUGb83WUC4");
 #endif

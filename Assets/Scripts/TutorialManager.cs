@@ -98,6 +98,11 @@ public class TutorialManager : MonoBehaviour
             }
             else
                 m_PlayerHasBody = false;
+
+            if (Physics.CheckSphere(m_PlayerGameobject.transform.position, 2, m_DisposalAreaLayerMask))
+            {
+                m_PlayerInArea = true;
+            }
         }
         if (m_BloodSpawner.activeSelf)
         {
@@ -109,10 +114,7 @@ public class TutorialManager : MonoBehaviour
                 m_BloodCleaned = false;
         }
 
-        if(Physics.CheckSphere(m_PlayerGameobject.transform.position, 2, m_DisposalAreaLayerMask))
-        {
-            m_PlayerInArea = true;
-        }
+
     }
 
     int LargeJunkCheck()

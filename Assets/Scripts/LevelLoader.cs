@@ -24,7 +24,16 @@ public class LevelLoader : MonoBehaviour
         m_GameManager = GameObject.FindGameObjectWithTag("Manager.Game").GetComponent<GameManager>();
         m_OldScene = m_GameManager.m_LastScene;
         m_NewScene = m_GameManager.m_NewScene;
-        m_Title.text = System.IO.Path.GetFileNameWithoutExtension(SceneUtility.GetScenePathByBuildIndex(m_NewScene)); ;
+        m_Title.text = System.IO.Path.GetFileNameWithoutExtension(SceneUtility.GetScenePathByBuildIndex(m_NewScene));
+        
+
+        //* Fallback if level dont exist
+        if(m_Title.text == "")
+        {
+            m_NewScene = 0;
+        }
+
+
         StartCoroutine(SceneUnloadAndLoad());
     }
 

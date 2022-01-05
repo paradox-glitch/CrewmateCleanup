@@ -118,7 +118,8 @@ public class DiscordController : MonoBehaviour
 
     void Update()
     {
-        discord.RunCallbacks();
+        if (discord != null)
+            discord.RunCallbacks();
     }
 
     int CurrentUnixTime()
