@@ -20,7 +20,7 @@ using System;
 public class MainMenu : MonoBehaviour
 {
 
-    private const string scoreURL = "https://crewmatecleanup.pdox.uk/highscore.php";
+    private const string scoreURL = "https://cmcu.pdox.uk/highscore.php";
 
     [Header("Consent")]
     [SerializeField] private GameObject _consentPanel;

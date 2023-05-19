@@ -18,8 +18,8 @@ public static class ScoreboardConnection
 {
 
 
-    private const string scoreURL = "https://crewmatecleanup.pdox.uk/highscore.php";
-    private const string highscoreURL = "https://crewmatecleanup.pdox.uk/leaderboard.php";
+    private const string scoreURL = "https://cmcu.pdox.uk/highscore.php";
+    private const string highscoreURL = "https://cmcu.pdox.uk/leaderboard.php";
 
     public class SucsessData
     {
@@ -88,7 +88,6 @@ public static class ScoreboardConnection
             HttpResponseMessage result = await httpClient.PostAsync(highscoreURL, a_Form);
             if (result.IsSuccessStatusCode)
             {
-                Debug.Log("Get Score good");
                 string l_leaderboardCommaSeperated = await result.Content.ReadAsStringAsync();
 
                 string l_FilePath = a_ApplicationPersistantDataPath + "/ScoreboardData" + a_LevelCodeFilter + ".csv";
